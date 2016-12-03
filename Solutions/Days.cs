@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Solutions.Models.Day1;
@@ -87,7 +88,37 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
         }
       }
 
-      return string.Format("Day 3 p1: The amount of possible triangles is : {0}", amountPossible);
+      var splitInput3 = input3.Select(x => Regex.Split(x.Trim(), @"(\d+)[ ]+(\d+)[ ]+(\d+)")).ToArray();
+
+      var amountPossibleP2 = 0;
+
+      for (var idx = 0; idx < splitInput3.Length; idx += 3)
+      {
+        if (idx + 2 >= splitInput3.Length)
+        {
+          continue;
+        }
+
+        for (var idx2 = 1; idx2 < 4; idx2++)
+        {
+          triangle.SetSides(
+            int.Parse(splitInput3[idx][idx2]),
+            int.Parse(splitInput3[idx + 1][idx2]),
+            int.Parse(splitInput3[idx + 2][idx2])
+          );
+
+          if (triangle.IsPossible())
+          {
+            amountPossibleP2++;
+          }
+        }
+      }
+
+      return string.Concat(
+        string.Format("Day 3 p1: The amount of possible triangles is : {0}", amountPossible), 
+        Environment.NewLine, 
+        string.Format("Day 3 p2: The amount of possible triangles is : {0}", amountPossibleP2)
+      );
     }
   }
 }
