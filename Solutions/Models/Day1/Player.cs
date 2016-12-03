@@ -27,8 +27,7 @@ namespace Solutions.Models.Day1
     public void HandleInput(char direction, int steps)
     {
       //First, change direction
-      Console.WriteLine("Facing: {0} Direction: {1}, Steps {2} X: {3} Y: {4}", Direction.ToString(), direction, steps, X, Y);
-
+      
       switch (char.ToLower(direction))
       {
         case 'l':

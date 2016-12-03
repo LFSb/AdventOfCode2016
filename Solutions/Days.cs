@@ -20,7 +20,7 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
 
     private const string Input3 = "../../Input/Input3.txt";
 
-    public static void Day1()
+    public static string Day1()
     {
       var input1Array = Input1.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -33,11 +33,14 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
         player.HandleInput(trimmed[0], int.Parse(trimmed.Substring(1)));
       }
 
-      Console.WriteLine("Outcome: Destination is at X: {0} Y: {1} Amount of blocks away: {2}", player.X, player.Y, player.AmountOfBlocksAwayFromStart());
-      Console.WriteLine("Day 2: {0}", player.Message);
+      return string.Concat(
+        string.Format("Day1 p1: Destination is at X: {0} Y: {1} Amount of blocks away: {2}", player.X, player.Y, player.AmountOfBlocksAwayFromStart()),
+        Environment.NewLine,
+        string.Format("Day 1 p2: {0}", player.Message)
+      );
     }
 
-    public static void Day2()
+    public static string Day2()
     {
       var input2Array = Input2.Split(new[]
       {
@@ -55,11 +58,13 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
         bssb.Append(bsKeyPad.ReturnButtonToPress(line));
       }
 
-      Console.WriteLine("The code for the normal keypad is: {0}", sb.ToString());
-      Console.WriteLine("The code for the bullshit keypad is: {0}", bssb.ToString());
+      return string.Concat(
+        string.Format("Day2 p1: The code for the normal keypad is: {0}", sb),
+        Environment.NewLine,
+        string.Format("Day2 p2: The code for the bullshit keypad is: {0}", bssb));
     }
 
-    public static void Day3()
+    public static string Day3()
     {
       var input3 = File.ReadLines(Input3);
       var triangle = new Triangle();
@@ -82,7 +87,7 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
         }
       }
 
-      Console.WriteLine("The amount of possible triangles is : {0}", amountPossible);
+      return string.Format("Day 3 p1: The amount of possible triangles is : {0}", amountPossible);
     }
   }
 }

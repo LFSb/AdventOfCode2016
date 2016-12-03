@@ -6,9 +6,9 @@ namespace Solutions
   {
     static void Main(string[] args)
     {
-      //Days.Day1();
-      //Days.Day2();
-      Days.Day3();
+      Console.WriteLine(Days.Day1());
+      Console.WriteLine(Days.Day2());
+      Console.WriteLine(Days.Day3());
       Console.ReadLine();
     }
   }
