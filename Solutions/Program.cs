@@ -9,6 +9,7 @@ namespace Solutions
       Console.WriteLine(Days.Day1());
       Console.WriteLine(Days.Day2());
       Console.WriteLine(Days.Day3());
+      Console.WriteLine(Days.Day4());
       Console.ReadLine();
     }
   }

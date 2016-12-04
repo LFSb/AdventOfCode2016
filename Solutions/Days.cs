@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Text.RegularExpressions;
 using Solutions.Models.Day1;
 using Solutions.Models.Day2;
 using Solutions.Models.Day3;
+using Solutions.Models.Day4;
 
 namespace Solutions
 {
@@ -20,6 +22,10 @@ LDUURLLULRUURRDLDRUULRDRDDDRULDLURDDRURULLRUURRLRRLDRURRDRLUDRUUUULLDRLURDRLRUDD
 DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRULRDDLDUDLDLULRULDRRLUDLLLLURUDUDLLDLDRLRUUULRDDLUURDRRDLUDUDRULRRDDRRLDUDLLDLURLRDLRUUDLDULURDDUUDDLRDLUURLDLRLRDLLRUDRDUURDDLDDLURRDDRDRURULURRLRLDURLRRUUUDDUUDRDRULRDLURLDDDRURUDRULDURUUUUDULURUDDDDUURULULDRURRDRDURUUURURLLDRDLDLRDDULDRLLDUDUDDLRLLRLRUUDLUDDULRLDLLRLUUDLLLUUDULRDULDLRRLDDDDUDDRRRDDRDDUDRLLLDLLDLLRDLDRDLUDRRRLDDRLUDLRLDRUURUDURDLRDDULRLDUUUDRLLDRLDLLDLDRRRLLULLUDDDLRUDULDDDLDRRLLRDDLDUULRDLRRLRLLRUUULLRDUDLRURRRUULLULLLRRURLRDULLLRLDUUUDDRLRLUURRLUUUDURLRDURRDUDDUDDRDDRUD";
 
     private const string Input3 = "../../Input/Input3.txt";
+
+    private const string Input4 = "../../Input/Input4.txt";
+
+    private const string TestInput4 = "aaaaa-bbb-z-y-x-123[abxyz]";
 
     public static string Day1()
     {
@@ -115,10 +121,47 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
       }
 
       return string.Concat(
-        string.Format("Day 3 p1: The amount of possible triangles is : {0}", amountPossible), 
-        Environment.NewLine, 
+        string.Format("Day 3 p1: The amount of possible triangles is : {0}", amountPossible),
+        Environment.NewLine,
         string.Format("Day 3 p2: The amount of possible triangles is : {0}", amountPossibleP2)
       );
+    }
+
+    public static string Day4()
+    {
+      var result = new StringBuilder();
+
+      var input4 = File.ReadLines(Input4);
+      var room = new Room();
+
+      var sumSector = 0;
+
+      foreach (var line in input4)
+      {
+        var lastDashIndex = line.LastIndexOf('-');
+        var firstBracketIndex = line.IndexOf('[');
+
+        room.SetRoom(
+          line.Substring(0, lastDashIndex),
+          line.Substring(lastDashIndex + 1, firstBracketIndex - lastDashIndex - 1),
+          line.Substring(firstBracketIndex)
+        );
+
+        if (room.IsReal())
+        {
+          sumSector += room.Sector;
+          var name = room.DecryptRoomName();
+
+          if (name.Contains("pole"))
+          {
+            result.AppendLine(string.Format("Day 4 p2: Sector ID: {0}, Decryption result: {1}", room.Sector, name));
+          }
+        }
+      }
+
+      result.AppendLine(string.Format("Day 4 p1: The sum of sector id's is: {0}", sumSector));
+
+      return result.ToString();
     }
   }
 }

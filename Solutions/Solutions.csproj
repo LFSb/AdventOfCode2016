@@ -48,6 +48,7 @@
     <Compile Include="Models\Day2\BullShitKeyPad.cs" />
     <Compile Include="Models\Day2\Keypad.cs" />
     <Compile Include="Models\Day3\Triangle.cs" />
+    <Compile Include="Models\Day4\Room.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -56,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Input\Input3.txt" />
+    <Content Include="Input\Input4.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
