@@ -175,6 +175,7 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
       var passwordBuilder = new StringBuilder();
 
       var index = 0;
+      var linePos = 0;
 
       while(passwordBuilder.ToString().Length < 8)
       {
@@ -188,13 +189,17 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
 
           if(hex.StartsWith("00000"))
           {
-            passwordBuilder.Append(hex[5]);
-            System.Console.WriteLine("Appended {0}, password is now {1}", hex[5], passwordBuilder.ToString());
+            var character = hex[5];
+            passwordBuilder.Append(character);
+            System.Console.Write(character);
+            Console.SetCursorPosition(++linePos, Console.CursorTop);
           }
         }
 
         index++;
       }
+      
+      Console.WriteLine();
 
       var slightlyBetterPasswordBuilder = new char[8];
 
@@ -225,15 +230,18 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
                 {
                   slightlyBetterPasswordBuilder[position] = hex[6];
                   charactersFound++;
-                  System.Console.WriteLine("Appended {0} at {1}, password is now {2} at idx {3}", hex[6], int.Parse(hex[5].ToString()), string.Join("", slightlyBetterPasswordBuilder), idx);
+                  Console.SetCursorPosition(position, Console.CursorTop);
+                  System.Console.Write(hex[6]);
                 }                
               }
             }            
           }
         }
       }
-      
-      return string.Format("Day 5 p1: {0}", passwordBuilder.ToString());
+
+      Console.WriteLine();
+
+      return string.Concat(string.Format("Day 5 p1: {0}", passwordBuilder.ToString()), Environment.NewLine, string.Format("Day 5 p2: {0}",string.Join("", slightlyBetterPasswordBuilder)));
     }
   }
 }
