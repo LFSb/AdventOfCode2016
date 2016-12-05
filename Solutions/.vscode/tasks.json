@@ -4,9 +4,7 @@
     "version": "0.1.0",
     "command": "dotnet",
     "args": [
-         "run"
     ],
-    "taskSelector": "/t:",
     "showOutput": "silent",
     "tasks": [
         {

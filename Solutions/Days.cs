@@ -27,6 +27,10 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
 
     private const string TestInput4 = "aaaaa-bbb-z-y-x-123[abxyz]";
 
+    private const string TestInput5 = "abc";
+
+    private const string ActualInput5 = "ffykfhsq";
+
     public static string Day1()
     {
       var input1Array = Input1.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -162,6 +166,74 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
       result.AppendLine(string.Format("Day 4 p1: The sum of sector id's is: {0}", sumSector));
 
       return result.ToString();
+    }
+
+    public static string Day5()
+    {
+      System.Console.WriteLine("Beginning to crack passwords..");
+
+      var passwordBuilder = new StringBuilder();
+
+      var index = 0;
+
+      // while(passwordBuilder.ToString().Length < 8)
+      // {
+      //   var inputBytes = System.Text.Encoding.ASCII.GetBytes(string.Format("{0}{1}", ActualInput5, index));
+
+      //   using(var md5 = System.Security.Cryptography.MD5.Create())
+      //   {
+      //     var hashBytes = md5.ComputeHash(inputBytes);
+
+      //     var hex = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+
+      //     if(hex.StartsWith("00000"))
+      //     {
+      //       passwordBuilder.Append(hex[5]);
+      //       System.Console.WriteLine("Appended {0}, password is now {1}", hex[5], passwordBuilder.ToString());
+      //     }
+      //   }
+
+      //   index++;
+      // }
+
+      var slightlyBetterPasswordBuilder = new char[8];
+
+      var idx = 0;
+      var charactersFound = 0;
+
+      while(charactersFound != 8)
+      {
+        idx++;
+
+        var inputBytes = System.Text.Encoding.ASCII.GetBytes(string.Format("{0}{1}", ActualInput5, idx));
+
+        using(var md5 = System.Security.Cryptography.MD5.Create())
+        {
+          var hashBytes = md5.ComputeHash(inputBytes);
+
+          var hex = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+
+          if(hex.StartsWith("00000"))
+          {
+            int position;
+
+            if(int.TryParse(hex[5].ToString(), out position))
+            {
+              if(position < 8)
+              {
+                if(slightlyBetterPasswordBuilder[position] == '\0')
+                {
+                  slightlyBetterPasswordBuilder[position] = hex[6];
+                  charactersFound++;
+                  System.Console.WriteLine("Appended {0} at {1}, password is now {2} at idx {3}", hex[6], int.Parse(hex[5].ToString()), string.Join("", slightlyBetterPasswordBuilder), idx);
+                }                
+              }
+            }            
+          }
+        }
+      }
+      
+      return string.Format("Day 5 p1: {0}", passwordBuilder.ToString());
     }
   }
 }
