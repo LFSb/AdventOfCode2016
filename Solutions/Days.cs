@@ -176,25 +176,25 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
 
       var index = 0;
 
-      // while(passwordBuilder.ToString().Length < 8)
-      // {
-      //   var inputBytes = System.Text.Encoding.ASCII.GetBytes(string.Format("{0}{1}", ActualInput5, index));
+      while(passwordBuilder.ToString().Length < 8)
+      {
+        var inputBytes = System.Text.Encoding.ASCII.GetBytes(string.Format("{0}{1}", ActualInput5, index));
 
-      //   using(var md5 = System.Security.Cryptography.MD5.Create())
-      //   {
-      //     var hashBytes = md5.ComputeHash(inputBytes);
+        using(var md5 = System.Security.Cryptography.MD5.Create())
+        {
+          var hashBytes = md5.ComputeHash(inputBytes);
 
-      //     var hex = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+          var hex = BitConverter.ToString(hashBytes).Replace("-", string.Empty);
 
-      //     if(hex.StartsWith("00000"))
-      //     {
-      //       passwordBuilder.Append(hex[5]);
-      //       System.Console.WriteLine("Appended {0}, password is now {1}", hex[5], passwordBuilder.ToString());
-      //     }
-      //   }
+          if(hex.StartsWith("00000"))
+          {
+            passwordBuilder.Append(hex[5]);
+            System.Console.WriteLine("Appended {0}, password is now {1}", hex[5], passwordBuilder.ToString());
+          }
+        }
 
-      //   index++;
-      // }
+        index++;
+      }
 
       var slightlyBetterPasswordBuilder = new char[8];
 
