@@ -31,6 +31,25 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
 
     private const string ActualInput5 = "ffykfhsq";
 
+    private const string TestInput6 = @"eedadn
+drvtee
+eandsr
+raavrd
+atevrs
+tsrnev
+sdttsa
+rasrtv
+nssdts
+ntnada
+svetve
+tesnvt
+vntsnd
+vrdear
+dvrsen
+enarar";
+
+    private const string ActualInput6 = "./Input/Input6.txt";
+
     public static string Day1()
     {
       var input1Array = Input1.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -242,6 +261,46 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
       Console.WriteLine();
 
       return string.Concat(string.Format("Day 5 p1: {0}", passwordBuilder.ToString()), Environment.NewLine, string.Format("Day 5 p2: {0}",string.Join("", slightlyBetterPasswordBuilder)));
+    }
+
+    public static string Day6()
+    {
+      var positionFrequencies = new Dictionary<int, Dictionary<char, int>>();
+
+      foreach(var line in File.ReadAllText(ActualInput6).Split(new []{ Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+      {
+        for(var idx = 0; idx < line.Length; idx++)
+        {
+          if(!positionFrequencies.ContainsKey(idx))
+          {
+            positionFrequencies.Add(idx, new Dictionary<char, int>());
+            positionFrequencies[idx].Add(line[idx], 1);
+          }
+          else
+          {
+            if(positionFrequencies[idx].Select(x => x.Key).Contains(line[idx]))
+            {
+              positionFrequencies[idx][line[idx]]++;
+            }
+            else
+            {
+              positionFrequencies[idx].Add(line[idx], 1);
+            }
+          }
+
+        }
+      }
+
+      var sb = new StringBuilder();
+
+      foreach(var freq in positionFrequencies)
+      {
+        sb.Append(freq.Value.OrderBy(x => x.Value).First().Key);
+      }
+
+      System.Console.WriteLine(sb.ToString());
+
+      return string.Empty;
     }
   }
 }
