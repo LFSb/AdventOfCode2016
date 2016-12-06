@@ -64,7 +64,7 @@ enarar";
       }
 
       return string.Concat(
-        string.Format("Day1 p1: Destination is at X: {0} Y: {1} Amount of blocks away: {2}", player.X, player.Y, player.AmountOfBlocksAwayFromStart()),
+        string.Format("Day 1 p1: Destination is at X: {0} Y: {1} Amount of blocks away: {2}", player.X, player.Y, player.AmountOfBlocksAwayFromStart()),
         Environment.NewLine,
         string.Format("Day 1 p2: {0}", player.Message)
       );
@@ -291,16 +291,24 @@ enarar";
         }
       }
 
-      var sb = new StringBuilder();
+      var sb1 = new StringBuilder();
+      var sb2 = new StringBuilder();
 
       foreach(var freq in positionFrequencies)
       {
-        sb.Append(freq.Value.OrderBy(x => x.Value).First().Key);
+        sb1.Append(freq.Value.OrderByDescending(x => x.Value).First().Key);
       }
 
-      System.Console.WriteLine(sb.ToString());
+      foreach(var freq in positionFrequencies)
+      {
+        sb2.Append(freq.Value.OrderBy(x => x.Value).First().Key);
+      }
 
-      return string.Empty;
+      return string.Concat(
+        string.Format("Day 6 p1: {0}", sb1.ToString()), 
+        Environment.NewLine, 
+        string.Format("Day 6 p2: {0}", sb2.ToString())
+      );
     }
   }
 }
