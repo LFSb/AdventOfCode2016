@@ -8,6 +8,7 @@ using Solutions.Models.Day1;
 using Solutions.Models.Day2;
 using Solutions.Models.Day3;
 using Solutions.Models.Day4;
+using Solutions.Models.Day7;
 
 namespace Solutions
 {
@@ -49,6 +50,13 @@ dvrsen
 enarar";
 
     private const string ActualInput6 = "./Input/Input6.txt";
+
+    private const string ActualInput7 = "./Input/Input7.txt";
+
+    private static string[] TestInput7 = new []{"abba[mnop]qrst",
+  "abcd[bddb]xyyx",
+  "aaaa[qwer]tyui",
+  "ioxxoj[asdfgh]zxcvbn"};
 
     public static string Day1()
     {
@@ -257,7 +265,7 @@ enarar";
           }
         }
       }
-
+      
       Console.WriteLine();
 
       return string.Concat(string.Format("Day 5 p1: {0}", passwordBuilder.ToString()), Environment.NewLine, string.Format("Day 5 p2: {0}",string.Join("", slightlyBetterPasswordBuilder)));
@@ -309,6 +317,48 @@ enarar";
         Environment.NewLine, 
         string.Format("Day 6 p2: {0}", sb2.ToString())
       );
+    }
+
+    public static string Day7()
+    {         
+      var input = File.ReadAllLines(ActualInput7);
+      var p1 = 0;
+
+      foreach(var line in input)
+      {
+        var split = line.Split(new []{'[', ']'});
+
+        var ipv7s = new List<string>();
+        var hyperNet = new List<string>();
+
+        for(var idx = 0; idx < split.Length; idx++)
+        {
+          if(idx % 2 != 0)
+          {
+            hyperNet.Add(split[idx]);
+          }
+          else
+          {
+            ipv7s.Add(split[idx]);
+          }
+        }
+
+        if(ipv7s.Any(x => PalindromeHelper.ContainsFourLetterPalindrome(x)))
+        {
+          if(!hyperNet.Any(net => PalindromeHelper.ContainsFourLetterPalindrome(net)))
+          {
+            p1++;
+          }
+        }
+
+        foreach(var ipv7 in ipv7s)
+        {
+          var abas = PalindromeHelper.ABACheck(ipv7);
+
+        }
+      }
+      
+      return string.Format("Day7 p1: {0} ips are TLS supported.", p1);
     }
   }
 }
