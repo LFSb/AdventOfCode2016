@@ -53,6 +53,7 @@ build/
 *.pidb
 *.log
 *.scc
+*.lock.json
 
 # OS generated files #
 .DS_Store*
