@@ -23,24 +23,13 @@ namespace Solutions.Models.Day7
 
             for(var idx = 0; idx < input.Length - 2; idx++)
             {
-                if(input[idx] == input[idx + 2] && input[idx + 1] != input[idx])
+                if(input[idx] == input[idx + 2] && input[idx] != input[idx + 1])
                 {
                     abaCollection.Add(string.Join("", new []{ input[idx], input[idx + 1], input[idx + 2] }));
                 }
             }
 
             return abaCollection.ToArray();
-        }
-
-        public static bool IsAba(string input1, string input2)
-        {
-            if(input1.Length != input2.Length)
-            {
-                return false;
-            }
-
-            return true;
-
         }
     }
 }

@@ -336,13 +336,17 @@ enarar";
         {
           if(idx % 2 != 0)
           {
+            //If the index is even, it is a hypernet.
             hyperNet.Add(split[idx]);
           }
           else
           {
+            //If it's odd, it's not.
             ipv7s.Add(split[idx]);
           }
         }
+
+        //P1
 
         if(ipv7s.Any(x => PalindromeHelper.ContainsFourLetterPalindrome(x)))
         {
@@ -352,20 +356,28 @@ enarar";
           }
         }
 
+        //P2
+
         var hyperNetAbas = hyperNet.SelectMany(x => PalindromeHelper.ABACheck(x));
+        
+        bool isSsl = false;
 
         foreach(var ipv7 in ipv7s)
         {
           foreach(var abaCheck in PalindromeHelper.ABACheck(ipv7))
           {
-            foreach(var hyperNetAba in hyperNetAbas)
+            var bab = string.Join("",new []{ abaCheck[1], abaCheck[0], abaCheck[1] });
+
+            if(hyperNetAbas.Contains(bab))
             {
-              if(PalindromeHelper.IsAba(abaCheck, hyperNetAba))
-              {
-                p2++;
-              }
+              isSsl = true;
             }
           }
+        }
+
+        if(isSsl)
+        {
+          p2++;
         }
       }
       
