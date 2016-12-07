@@ -31,5 +31,16 @@ namespace Solutions.Models.Day7
 
             return abaCollection.ToArray();
         }
+
+        public static bool IsAba(string input1, string input2)
+        {
+            if(input1.Length != input2.Length)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
     }
 }

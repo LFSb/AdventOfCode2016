@@ -323,6 +323,7 @@ enarar";
     {         
       var input = File.ReadAllLines(ActualInput7);
       var p1 = 0;
+      var p2 = 0;
 
       foreach(var line in input)
       {
@@ -351,14 +352,24 @@ enarar";
           }
         }
 
+        var hyperNetAbas = hyperNet.SelectMany(x => PalindromeHelper.ABACheck(x));
+
         foreach(var ipv7 in ipv7s)
         {
-          var abas = PalindromeHelper.ABACheck(ipv7);
-
+          foreach(var abaCheck in PalindromeHelper.ABACheck(ipv7))
+          {
+            foreach(var hyperNetAba in hyperNetAbas)
+            {
+              if(PalindromeHelper.IsAba(abaCheck, hyperNetAba))
+              {
+                p2++;
+              }
+            }
+          }
         }
       }
       
-      return string.Format("Day7 p1: {0} ips are TLS supported.", p1);
+      return string.Concat(string.Format("Day7 p1: {0} ips are TLS supported.", p1), Environment.NewLine, string.Format("Day7 p2: {0} ips are SSL supported", p2));
     }
   }
 }
