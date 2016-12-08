@@ -14,6 +14,8 @@ namespace Solutions.Models.Day8
 
         public Screen()
         {
+            Console.SetWindowSize(Width, Height);
+
             for(var h = 0; h < Height; h++)
             {
                 for(var w = 0; w < Width; w++)
@@ -43,7 +45,15 @@ namespace Solutions.Models.Day8
                 } break;
                 case "rotate":
                 {
-                    RotateRow(string.Join("", splitInput.Skip(1)));
+                    if(splitInput[1] == "column")
+                    {
+                        RotateColumn(string.Join("", splitInput.Skip(2)));
+                    }
+                    else if(splitInput[1] == "row")
+                    {
+                        RotateRow(string.Join("", splitInput.Skip(2)));
+                    }
+
                 } break;
                 default :
                 {
@@ -71,9 +81,24 @@ namespace Solutions.Models.Day8
             }            
         }
 
+        public void ParseMovement(string input, out int first, out int second) 
+        {
+            var splits = input.Split(new []{ "by" }, StringSplitOptions.None).Select(x => x.Trim()).ToArray();
+
+            
+            first = int.Parse(splits[0].Substring(splits[0].IndexOf('=')));
+            second = int.Parse(splits[1]);
+            
+        }
+
         public void RotateRow(string input)
         {
             
+        }
+
+        public void RotateColumn(string input)
+        {
+
         }
 
         private void DrawScreen()
@@ -85,9 +110,12 @@ namespace Solutions.Models.Day8
                 for(var width = 0; width < Width; width++)
                 {
                     Console.SetCursorPosition(width, consolePos + height);
-                    Console.Write(".");
+                    Console.Write(Grid[height][width] ? "#" : ".");
                 }
             }
+
+            System.Console.WriteLine();
+            System.Console.WriteLine();
         }
     }   
 }
