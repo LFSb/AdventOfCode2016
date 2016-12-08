@@ -398,12 +398,14 @@ enarar";
     {
       var screen = new Screen();
 
-      foreach(var line in TestInput8)
+      foreach(var line in File.ReadLines(ActualInput8))
       {
         screen.ParseInput(line);
       }
       
-      return string.Empty;
+      screen.DrawScreen();
+
+      return string.Format("Day8 p1: {0} pixels on", screen.ReturnPixelsOn());
     }
   }
 }

@@ -14,8 +14,6 @@ namespace Solutions.Models.Day8
 
         public Screen()
         {
-            Console.SetWindowSize(Width, Height);
-
             for(var h = 0; h < Height; h++)
             {
                 for(var w = 0; w < Width; w++)
@@ -31,6 +29,23 @@ namespace Solutions.Models.Day8
                     
                 }                
             }
+        }
+
+        public int ReturnPixelsOn()
+        {
+            var count = 0;
+            foreach(var g in Grid)
+            {
+                foreach(var l in g.Value)
+                {
+                    if(l.Value)
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
         }
 
         public void ParseInput(string input)
@@ -61,7 +76,7 @@ namespace Solutions.Models.Day8
                 }
             }
             
-            DrawScreen();
+            //DrawScreen();
         }
 
         public void ActivateRect(string input)
@@ -85,28 +100,51 @@ namespace Solutions.Models.Day8
         {
             var splits = input.Split(new []{ "by" }, StringSplitOptions.None).Select(x => x.Trim()).ToArray();
 
-            
-            first = int.Parse(splits[0].Substring(splits[0].IndexOf('=')));
+            first = int.Parse(splits[0].Substring(splits[0].IndexOf('=') + 1));
             second = int.Parse(splits[1]);
-            
         }
 
         public void RotateRow(string input)
         {
-            int first;
-            int second;
+            int rowNumber;
+            int shifts;
 
-            ParseMovement(input, out first, out second);
+            ParseMovement(input, out rowNumber, out shifts);
 
-            
+            for(var shift = 0; shift < shifts; shift++)
+            {
+                bool temp = Grid[rowNumber][Width - 1];
+
+                for(var movement = Width - 1; movement > 0; movement--)
+                {
+                    Grid[rowNumber][movement] = Grid[rowNumber][movement - 1];
+                }
+                
+                Grid[rowNumber][0] = temp;
+            }                  
         }
 
         public void RotateColumn(string input)
         {
+            int columnNumber;
+            int shifts;
 
+            ParseMovement(input, out columnNumber, out shifts);
+            
+            for(var shift = 0; shift < shifts; shift++)
+            {
+                bool temp = Grid[Height - 1][columnNumber];
+
+                for(var movement = Height - 1; movement > 0; movement--)
+                {
+                    Grid[movement][columnNumber] = Grid[movement - 1][columnNumber];
+                }
+                
+                Grid[0][columnNumber] = temp;
+            }
         }
 
-        private void DrawScreen()
+        public void DrawScreen()
         {
             var consolePos = Console.CursorTop;
 
