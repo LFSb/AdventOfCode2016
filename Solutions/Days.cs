@@ -9,6 +9,7 @@ using Solutions.Models.Day2;
 using Solutions.Models.Day3;
 using Solutions.Models.Day4;
 using Solutions.Models.Day7;
+using Solutions.Models.Day8;
 
 namespace Solutions
 {
@@ -57,6 +58,15 @@ enarar";
   "abcd[bddb]xyyx",
   "aaaa[qwer]tyui",
   "ioxxoj[asdfgh]zxcvbn"};
+
+    private const string ActualInput8 = "./Input/Input8.txt";
+
+    private static string[] TestInput8 = new []{
+      "rect 3x2",
+      "rotate column x=1 by 1",
+      "rotate row y=0 by 4",
+      "rotate column x=1 by 1",
+    };
 
     public static string Day1()
     {
@@ -382,6 +392,18 @@ enarar";
       }
       
       return string.Concat(string.Format("Day7 p1: {0} ips are TLS supported.", p1), Environment.NewLine, string.Format("Day7 p2: {0} ips are SSL supported", p2));
+    }
+
+    public static string Day8()
+    {
+      var screen = new Screen();
+
+      foreach(var line in TestInput8)
+      {
+        screen.ParseInput(line);
+      }
+      
+      return string.Empty;
     }
   }
 }
