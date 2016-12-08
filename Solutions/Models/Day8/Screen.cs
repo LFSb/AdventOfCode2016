@@ -93,6 +93,11 @@ namespace Solutions.Models.Day8
 
         public void RotateRow(string input)
         {
+            int first;
+            int second;
+
+            ParseMovement(input, out first, out second);
+
             
         }
 
