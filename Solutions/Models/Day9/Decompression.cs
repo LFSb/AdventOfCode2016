@@ -11,16 +11,16 @@ namespace Solutions.Models.Day9
 
       foreach(var input in inputLines)
       {
-        outputLength += ParseInput(input, part2).Length;
+        outputLength += ParseInput(input, part2);
       }
 
       return outputLength;
     }
 
-    public string ParseInput(string input, bool part2)
+    public long ParseInput(string input, bool part2)
     {
-      var output = new StringBuilder();
-  	  
+      long count = 0;
+
       for(var idx = 0; idx < input.Length; idx++)
       {
         if(input[idx] == '(')
@@ -33,26 +33,31 @@ namespace Solutions.Models.Day9
           var amountToRepeat = int.Parse(split[1]);
 
           var repeat = input.Substring(input.IndexOf(')', idx) + 1, charsToRepeat);
+          long repeatCount = 0;
 
           if(repeat.StartsWith("(") && part2) //We've got ourselves another marker.
           {
-            repeat = ParseInput(repeat, part2);
+            repeatCount += ParseInput(repeat, part2);
+          }
+          else
+          {
+            repeatCount = repeat.Length;
           }
 
           for(var idx2 = 0; idx2 < int.Parse(split[1]); idx2++)
           {
-            output.Append(repeat);
+            count += repeatCount;
           }
 
           idx = input.IndexOf(')', idx) +  charsToRepeat;
         }
         else
         {
-          output.Append(input[idx]);
+          count++;
         }
       }
 
-      return output.ToString();
+      return count;
     }
   }
 }

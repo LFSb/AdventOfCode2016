@@ -34,6 +34,42 @@ DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRUL
 
     private const string ActualInput5 = "ffykfhsq";
 
+    private static int[] ShortcutIndexes = new []{
+      515840,
+      844745,
+      2968550,
+      4034943,
+      5108969,
+      5257971,
+      5830668,
+      5833677,
+      6497076,
+      6681564,
+      8793263,
+      8962195,
+      10715437,
+      10999728,
+      11399249,
+      12046531,
+      12105075,
+      14775057,
+      15502588,
+      15872452,
+      16105326,
+      18804482,
+      18830862,
+      19388652,
+      19474413,
+      20787586,
+      21302616,
+      23462555,
+      23551279,
+      23853737,
+      23867827,
+      24090051,
+      26246522,
+      26383109};
+
     private const string TestInput6 = @"eedadn
 drvtee
 eandsr
@@ -223,12 +259,16 @@ enarar";
 
       var passwordBuilder = new StringBuilder();
 
-      var index = 0;
       var linePos = 0;
 
-      while(passwordBuilder.ToString().Length < 8)
+      foreach(var shortcutIndex in ShortcutIndexes)
       {
-        var inputBytes = System.Text.Encoding.ASCII.GetBytes(string.Format("{0}{1}", ActualInput5, index));
+        if(passwordBuilder.Length == 8)
+        {
+          break;
+        }
+
+        var inputBytes = System.Text.Encoding.ASCII.GetBytes(string.Format("{0}{1}", ActualInput5, shortcutIndex));
 
         using(var md5 = System.Security.Cryptography.MD5.Create())
         {
@@ -244,22 +284,22 @@ enarar";
             Console.SetCursorPosition(++linePos, Console.CursorTop);
           }
         }
-
-        index++;
       }
       
       Console.WriteLine();
 
       var slightlyBetterPasswordBuilder = new char[8];
-
-      var idx = 0;
+      
       var charactersFound = 0;
 
-      while(charactersFound != 8)
+      foreach(var shortcutIndex in ShortcutIndexes)
       {
-        idx++;
+        if(charactersFound == 8)
+        {
+          break;
+        }
 
-        var inputBytes = System.Text.Encoding.ASCII.GetBytes(string.Format("{0}{1}", ActualInput5, idx));
+        var inputBytes = System.Text.Encoding.ASCII.GetBytes(string.Format("{0}{1}", ActualInput5, shortcutIndex));
 
         using(var md5 = System.Security.Cryptography.MD5.Create())
         {
@@ -426,7 +466,7 @@ enarar";
 
       var output1 = dec.DecompressInput(File.ReadAllLines(ActualInput9), false);
 
-      var output2 = dec.DecompressInput(new []{"(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN"}, true);
+      var output2 = dec.DecompressInput(File.ReadAllLines(ActualInput9), true);
 
       return string.Concat(string.Format("Day 9 p1 {0}", output1), Environment.NewLine, string.Format("Day 9 p2 {0}", output2));
     }
