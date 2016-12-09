@@ -10,6 +10,7 @@ using Solutions.Models.Day3;
 using Solutions.Models.Day4;
 using Solutions.Models.Day7;
 using Solutions.Models.Day8;
+using Solutions.Models.Day9;
 
 namespace Solutions
 {
@@ -76,6 +77,8 @@ enarar";
       "(6x1)(1x3)A",
       "X(8x2)(3x3)ABCY",
     };
+
+    private static string ActualInput9 = "./Input/Input9.txt"; 
 
     public static string Day1()
     {
@@ -419,41 +422,13 @@ enarar";
 
     public static string Day9()
     {
-      foreach(var input in TestInput9)
-      {
-        var output = new StringBuilder();
+      var dec = new Decompression();
 
-        for(var idx = 0; idx < input.Length; idx++)
-        {
-          if(input[idx] == '(')
-          {
-            var sub = input.Substring(idx, input.IndexOf(')', idx));
-            
-            var split = sub.Split('x').Select(x => x.Trim(new [] {'(', ')'})).ToArray();
+      var output1 = dec.DecompressInput(File.ReadAllLines(ActualInput9), false);
 
-            var repeat = input.Substring(input.IndexOf(')', idx) + 1, int.Parse(split[0]));
+      var output2 = dec.DecompressInput(new []{"(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN"}, true);
 
-            for(var idx2 = 0; idx2 < int.Parse(split[1]); idx2++)
-            {
-              output.Append(repeat);
-            }
-
-            idx = input.IndexOf(')', idx) + 1;
-          }
-          else
-          {
-            output.Append(input[idx]);
-          }
-        }
-
-        System.Console.WriteLine(output.ToString());
-        System.Console.WriteLine(output.Length);
-
-      }
-
-      
-
-      return string.Empty;
+      return string.Concat(string.Format("Day 9 p1 {0}", output1), Environment.NewLine, string.Format("Day 9 p2 {0}", output2));
     }
   }
 }
