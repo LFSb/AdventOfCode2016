@@ -68,6 +68,15 @@ enarar";
       "rotate column x=1 by 1",
     };
 
+    private static string[] TestInput9 = new []{
+      "ADVENT",
+      "A(1x5)BC",
+      "(3x3)XYZ",
+      "A(2x2)BCD(2x2)EFG",
+      "(6x1)(1x3)A",
+      "X(8x2)(3x3)ABCY",
+    };
+
     public static string Day1()
     {
       var input1Array = Input1.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -406,6 +415,45 @@ enarar";
       screen.DrawScreen();
 
       return string.Format("Day8 p1: {0} pixels on", screen.ReturnPixelsOn());
+    }
+
+    public static string Day9()
+    {
+      foreach(var input in TestInput9)
+      {
+        var output = new StringBuilder();
+
+        for(var idx = 0; idx < input.Length; idx++)
+        {
+          if(input[idx] == '(')
+          {
+            var sub = input.Substring(idx, input.IndexOf(')', idx));
+            
+            var split = sub.Split('x').Select(x => x.Trim(new [] {'(', ')'})).ToArray();
+
+            var repeat = input.Substring(input.IndexOf(')', idx) + 1, int.Parse(split[0]));
+
+            for(var idx2 = 0; idx2 < int.Parse(split[1]); idx2++)
+            {
+              output.Append(repeat);
+            }
+
+            idx = input.IndexOf(')', idx) + 1;
+          }
+          else
+          {
+            output.Append(input[idx]);
+          }
+        }
+
+        System.Console.WriteLine(output.ToString());
+        System.Console.WriteLine(output.Length);
+
+      }
+
+      
+
+      return string.Empty;
     }
   }
 }
