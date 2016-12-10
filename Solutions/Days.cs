@@ -559,7 +559,7 @@ enarar";
       var output1 = output[1];
       var output2 = output[2];
 
-      return string.Concat(string.Format("Day 10 p1: id {0}", datBot == null ? "not found!" : datBot.Id.ToString()), Environment.NewLine, string.Format("Day 10 p2: {0}", output0.First().Value * output1.First().Value * output2.First().Value));
+      return string.Concat(string.Format("Day 10 p1: {0}", datBot == null ? "not found!" : datBot.Id.ToString()), Environment.NewLine, string.Format("Day 10 p2: {0}", output0.First().Value * output1.First().Value * output2.First().Value));
     }
   }
 }

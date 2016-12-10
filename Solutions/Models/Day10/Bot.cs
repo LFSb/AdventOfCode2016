@@ -16,15 +16,19 @@ namespace Solutions.Models.Day10
     {
       var highOrLow = split[0]; 
 
-      var botOrOutput = split[2]; 
+      var botOrOutput = split[2] == "bot"; 
 
       var botOrOutputNumber = int.Parse(split[3]); 
 
       var chipToAdd = default(Chip); 
 
-      if (botOrOutput == "bot") 
+      var otherBot = default(Bot);
+
+      if (botOrOutput) 
       {
-        var otherBot = otherBots.FirstOrDefault(x => x.Id == botOrOutputNumber); 
+        //If true, it's a bot. Check if a bot by that number exists, and if not, create it.
+
+        otherBot = otherBots.FirstOrDefault(x => x.Id == botOrOutputNumber); 
 
         if (otherBot == null) 
         {
@@ -35,70 +39,49 @@ namespace Solutions.Models.Day10
 
           otherBots.Add(otherBot); 
         }
-
-        if(this.Chips.Count() == 2)
-        {
-          if(this.Chips.Select(x => x.Value).Contains(61) && this.Chips.Select(x => x.Value).Contains(17))
-          {
-            datbot = true;
-          }
-
-          chipToAdd = DetermineChip(highOrLow);
-          
-          if(split.Count() > 4)
-          {
-            var result = ParseCommand(split.Skip(5).ToArray(), ref otherBots, ref output);
-            otherBot.Chips.Add(chipToAdd); 
-            this.Chips.Remove(chipToAdd);
-            return result;
-          }
-          else
-          {
-            otherBot.Chips.Add(chipToAdd); 
-            this.Chips.Remove(chipToAdd);
-
-            return true;
-          }
-        }
-        else
-        {
-          return false;
-        }        
       }
-      else 
+      else
+      {
+        //If false, move to output.
+        
+        if (!output.ContainsKey(botOrOutputNumber))       
+        {                                                 
+          output.Add(botOrOutputNumber, new List<Chip>());
+        }                                                 
+      }
+
+      if(this.Chips.Count() == 2)
       {
         if(this.Chips.Select(x => x.Value).Contains(61) && this.Chips.Select(x => x.Value).Contains(17))
         {
           datbot = true;
         }
 
-        if (!output.ContainsKey(botOrOutputNumber))
+        chipToAdd = DetermineChip(highOrLow);
+        
+        var result = true;
+
+        if(split.Count() > 4)
         {
-          output.Add(botOrOutputNumber, new List<Chip>()); 
+          result = ParseCommand(split.Skip(5).ToArray(), ref otherBots, ref output);
         }
 
-        if(this.Chips.Count() == 2)
+        if(botOrOutput)
         {
-          chipToAdd = DetermineChip(highOrLow);
-          
-          if(split.Count() > 4)
-          {
-              var result = ParseCommand(split.Skip(5).ToArray(), ref otherBots, ref output);
-              output[botOrOutputNumber].Add(chipToAdd); 
-              this.Chips.Remove(chipToAdd); 
-              return result;
-          }
-          else
-          {
-            output[botOrOutputNumber].Add(chipToAdd); 
-            this.Chips.Remove(chipToAdd);
-            return true;
-          }
+          otherBot.Chips.Add(chipToAdd);
         }
         else
         {
-          return false;
-        } 
+          output[botOrOutputNumber].Add(chipToAdd);
+        }
+        
+        this.Chips.Remove(chipToAdd);
+
+        return result;
+      }
+      else
+      {
+        return false;
       }
     }
 
