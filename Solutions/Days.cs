@@ -11,6 +11,7 @@ using Solutions.Models.Day4;
 using Solutions.Models.Day7;
 using Solutions.Models.Day8;
 using Solutions.Models.Day9;
+using Solutions.Models.Day10;
 
 namespace Solutions
 {
@@ -114,7 +115,16 @@ enarar";
       "X(8x2)(3x3)ABCY",
     };
 
-    private static string ActualInput9 = "./Input/Input9.txt"; 
+    private const string ActualInput9 = "./Input/Input9.txt";
+
+    private const string ActualInput10 = "./Input/Input10.txt";  
+
+    private static string[] TestInput10 = new []{"value 5 goes to bot 2",
+"bot 2 gives low to bot 1 and high to bot 0",
+"value 3 goes to bot 1",
+"bot 1 gives low to output 1 and high to bot 0",
+"bot 0 gives low to output 2 and high to output 0",
+"value 2 goes to bot 2"};
 
     public static string Day1()
     {
@@ -469,6 +479,87 @@ enarar";
       var output2 = dec.DecompressInput(File.ReadAllLines(ActualInput9), true);
 
       return string.Concat(string.Format("Day 9 p1 {0}", output1), Environment.NewLine, string.Format("Day 9 p2 {0}", output2));
+    }
+
+    public static string Day10()
+    {
+      var bots = new List<Bot>();
+
+      var lines = File.ReadLines(ActualInput10);
+
+      var linesCompleted = new Dictionary<string, bool>();
+
+      //First, create the first batch of bots by checking the lines in which said bots retrieve something from the input bin.
+      foreach(var line in lines)
+      {
+        if(line.StartsWith("value"))
+        {
+          var split = line.Split(' '); var value = int.Parse(split[1]); var botNumber = int.Parse(split[5]);
+
+          var bot = bots.FirstOrDefault(x => x.Id == botNumber);
+
+          if(bot == null)
+          {
+            bots.Add(new Bot
+            {
+              Id = botNumber,
+              Chips = new List<Chip>
+              {
+                new Chip
+                {
+                  Value = value
+                }
+              }
+            });
+          }
+          else
+          {
+            bot.Chips.Add(
+              new Chip
+              {
+                Value = value
+              });
+          }
+        }
+        else
+        {
+          linesCompleted.Add(line, false); 
+        }
+      }
+
+      var output = new Dictionary<int, List<Chip>>();
+
+      while(!linesCompleted.All(x => x.Value))
+      {
+        foreach(var line in linesCompleted.Where(x => !x.Value).Select(x => x.Key).ToArray())
+        {
+          if(line.StartsWith("bot"))
+          {
+            var split = line.Split(' ');
+
+            var currentBot = bots.FirstOrDefault(x => x.Id == int.Parse(split[1]));
+
+            if(currentBot == null)
+            {
+              currentBot = new Bot
+              {
+                Id = int.Parse(split[1])
+              };
+
+              bots.Add(currentBot);
+            }
+
+            linesCompleted[line] = currentBot.ParseCommand(split.Skip(3).ToArray(), ref bots, ref output); 
+          }
+        }
+      }
+
+      var datBot = bots.FirstOrDefault(x => x.datbot);
+      var output0 = output[0];
+      var output1 = output[1];
+      var output2 = output[2];
+
+      return string.Concat(string.Format("Day 10 p1: id {0}", datBot == null ? "not found!" : datBot.Id.ToString()), Environment.NewLine, string.Format("Day 10 p2: {0}", output0.First().Value * output1.First().Value * output2.First().Value));
     }
   }
 }
