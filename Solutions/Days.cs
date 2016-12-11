@@ -12,6 +12,7 @@ using Solutions.Models.Day7;
 using Solutions.Models.Day8;
 using Solutions.Models.Day9;
 using Solutions.Models.Day10;
+using Solutions.Models.Day11;
 
 namespace Solutions
 {
@@ -125,6 +126,13 @@ enarar";
 "bot 1 gives low to output 1 and high to bot 0",
 "bot 0 gives low to output 2 and high to output 0",
 "value 2 goes to bot 2"};
+
+    private static string[] TestInput11 = new[]{
+"The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.",
+"The second floor contains a hydrogen generator.",
+"The third floor contains a lithium generator.",
+"The fourth floor contains nothing relevant."
+};
 
     public static string Day1()
     {
@@ -555,11 +563,65 @@ enarar";
       }
 
       var datBot = bots.FirstOrDefault(x => x.datbot);
-      var output0 = output[0];
-      var output1 = output[1];
-      var output2 = output[2];
 
-      return string.Concat(string.Format("Day 10 p1: {0}", datBot == null ? "not found!" : datBot.Id.ToString()), Environment.NewLine, string.Format("Day 10 p2: {0}", output0.First().Value * output1.First().Value * output2.First().Value));
+      return string.Concat(string.Format("Day 10 p1: {0}", datBot == null ? "not found!" : datBot.Id.ToString()), Environment.NewLine, string.Format("Day 10 p2: {0}", output[0].First().Value * output[1].First().Value *  output[2].First().Value));
+    }
+
+    public static string Day11()
+    {
+      var floors = new List<Floor>();
+
+      //First, construct the floors according to the layout.
+
+      foreach(var line in TestInput11)
+      {
+        var newFloor = new Floor();
+        newFloor.ConstructFloor(line);
+        floors.Add(newFloor);
+      }
+
+      var firstFloor = floors.FirstOrDefault(x => x.FloorNumber == 1); 
+
+      var elevator = new Elevator
+      {
+        CurrentFloor = firstFloor
+      };
+
+      firstFloor.Elevator = elevator;
+
+      System.Console.WriteLine("Initial state:");
+
+      foreach(var floor in floors.OrderByDescending(x => x.FloorNumber))
+      {
+        floor.DrawFloor();
+      }
+
+      System.Console.WriteLine();
+
+      int moveCounter = 1;
+
+      while(moveCounter < 11)
+      {
+        System.Console.WriteLine("Move {0}", moveCounter);
+
+        var nextFloor = elevator.MoveUp(floors);
+        
+        if(nextFloor == null)
+        {
+          nextFloor = elevator.MoveDown(floors);
+        }
+
+        foreach(var floor in floors.OrderByDescending(x => x.FloorNumber))
+        {
+          floor.DrawFloor();
+        }
+        
+        System.Console.WriteLine();
+
+        moveCounter++;
+      }          
+
+      return string.Empty;
     }
   }
 }
