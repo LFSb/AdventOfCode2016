@@ -128,6 +128,8 @@ enarar";
 "bot 0 gives low to output 2 and high to output 0",
 "value 2 goes to bot 2"};
 
+    private const string ActualInput11 = "./Input/Input11.txt";
+
     private static string[] TestInput11 = new[]{
 "The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.",
 "The second floor contains a hydrogen generator.",
@@ -581,57 +583,8 @@ enarar";
 
     public static string Day11()
     {
-      var floors = new List<Floor>();
-
-      //First, construct the floors according to the layout.
-
-      foreach(var line in TestInput11)
-      {
-        var newFloor = new Floor();
-        newFloor.ConstructFloor(line);
-        floors.Add(newFloor);
-      }
-
-      var firstFloor = floors.FirstOrDefault(x => x.FloorNumber == 1); 
-
-      var elevator = new Elevator
-      {
-        CurrentFloor = firstFloor
-      };
-
-      firstFloor.Elevator = elevator;
-
-      System.Console.WriteLine("Initial state:");
-
-      foreach(var floor in floors.OrderByDescending(x => x.FloorNumber))
-      {
-        floor.DrawFloor();
-      }
-
-      System.Console.WriteLine();
-
-      int moveCounter = 1;
-
-      while(moveCounter < 11)
-      {
-        System.Console.WriteLine("Move {0}", moveCounter);
-
-        var nextFloor = elevator.MoveUp(floors);
-
-        if(nextFloor == null)
-        {
-          nextFloor = elevator.MoveDown(floors);
-        }
-
-        foreach(var floor in floors.OrderByDescending(x => x.FloorNumber))
-        {
-          floor.DrawFloor();
-        }
-        
-        System.Console.WriteLine();
-
-        moveCounter++;
-      }          
+      //First, construct the floors according to the layout. Create pairs of the same type.
+      var pairs = ParseLayout.Go(TestInput11);
 
       return string.Empty;
     }
