@@ -13,6 +13,7 @@ using Solutions.Models.Day8;
 using Solutions.Models.Day9;
 using Solutions.Models.Day10;
 using Solutions.Models.Day11;
+using Solutions.Models.Day12;
 
 namespace Solutions
 {
@@ -133,6 +134,17 @@ enarar";
 "The third floor contains a lithium generator.",
 "The fourth floor contains nothing relevant."
 };
+
+    private static string[] TestInput12 = new []{
+      "cpy 41 a",
+"inc a",
+"inc a",
+"dec a",
+"jnz a 2",
+"dec a"
+    };
+
+    private const string ActualInput12 = "./Input/Input12.txt";  
 
     public static string Day1()
     {
@@ -481,7 +493,7 @@ enarar";
     public static string Day9()
     {
       var dec = new Decompression();
-
+      
       var output1 = dec.DecompressInput(File.ReadAllLines(ActualInput9), false);
 
       var output2 = dec.DecompressInput(File.ReadAllLines(ActualInput9), true);
@@ -605,7 +617,7 @@ enarar";
         System.Console.WriteLine("Move {0}", moveCounter);
 
         var nextFloor = elevator.MoveUp(floors);
-        
+
         if(nextFloor == null)
         {
           nextFloor = elevator.MoveDown(floors);
@@ -622,6 +634,40 @@ enarar";
       }          
 
       return string.Empty;
+    }
+
+    public static string Day12()
+    {
+      var assembunny = new Assembunny(false);
+      var assembunny2 = new Assembunny(true);
+
+      var lines = File.ReadLines(ActualInput12).ToArray();
+
+      for(var instruction = 0; instruction < lines.Length;)
+      {
+        if(instruction < lines.Length)
+        {
+          instruction += assembunny.ParseInput(lines[instruction]);
+        }
+        else
+        {
+          instruction = lines.Length - 1;
+        }        
+      }
+
+      for(var instruction = 0; instruction < lines.Length;)
+      {
+        if(instruction < lines.Length)
+        {
+          instruction += assembunny2.ParseInput(lines[instruction]);
+        }
+        else
+        {
+          instruction = lines.Length - 1;
+        }        
+      }
+
+      return string.Concat(string.Format("Day 12 p1: {0}", assembunny.Registers['a']), Environment.NewLine, string.Format("Day 12 p2: {0}", assembunny2.Registers['a']));
     }
   }
 }
