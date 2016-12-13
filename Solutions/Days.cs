@@ -628,7 +628,7 @@ enarar";
     {
       int mazeSize = 10;
 
-      var maze = new int[mazeSize][];
+      var maze = new int[7][];
 
       var currentPosition = new Tuple<int, int>(1, 1);
 
@@ -660,29 +660,39 @@ enarar";
         }
       }
 
-      // foreach(var mazeRow in maze)
-      // {
-      //   foreach(var room in mazeRow)
-      //   {
-      //     System.Console.Write(room % 2 == 0 ? "." : "#");
-      //   }
-
-      //   Console.CursorTop += 1;
-      //   Console.CursorLeft = 0;
-      // }
-
       var coordinatesVisited = new List<Tuple<int, int>>();
       int steps = 0;
 
-      while(currentPosition.Item1 != 4 && currentPosition.Item2 != 7)
+      var targetCoordinate = new Tuple<int, int>(4, 7);
+
+      while((currentPosition.Item1 != targetCoordinate.Item1 || currentPosition.Item2 != targetCoordinate.Item2))
       {
+        for(var y = 0; y < maze.Length; y++)
+        {
+          for(var x = 0; x < maze[y].Length; x++)
+          {
+            if(y == currentPosition.Item1 && x == currentPosition.Item2 || coordinatesVisited.Contains(new Tuple<int, int>(y, x)))
+            {
+              System.Console.Write("O");
+            }
+            else
+            {
+              System.Console.Write(maze[y][x] % 2 == 0 ? "." : "#");
+            }          
+          }
+
+          System.Console.WriteLine();
+        }
+
+        System.Console.WriteLine("Current position y:{0} x:{1}", currentPosition.Item1, currentPosition.Item2);
+
         coordinatesVisited.Add(currentPosition);
 
-        if(maze[currentPosition.Item1 + 1][currentPosition.Item2] % 2 == 0)
+        if(maze[currentPosition.Item1 + Math.Sign(currentPosition.Item1 + targetCoordinate.Item1)][currentPosition.Item2] % 2 == 0)
         {
-          currentPosition = new Tuple<int, int>(currentPosition.Item1 + 1, currentPosition.Item2);
+          currentPosition = new Tuple<int, int>(currentPosition.Item1 + Math.Sign(currentPosition.Item1 + targetCoordinate.Item1), currentPosition.Item2);
         }
-        else if(maze[currentPosition.Item1][currentPosition.Item2 + 1] % 2 == 0)
+        else if(maze[currentPosition.Item1][currentPosition.Item2 + Math.Sign(currentPosition.Item2 + targetCoordinate.Item2)] % 2 == 0)
         {
           currentPosition = new Tuple<int, int>(currentPosition.Item1, currentPosition.Item2 + 1);
         }
