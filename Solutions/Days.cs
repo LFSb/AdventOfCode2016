@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -621,6 +622,77 @@ enarar";
       }
 
       return string.Concat(string.Format("Day 12 p1: {0}", assembunny.Registers['a']), Environment.NewLine, string.Format("Day 12 p2: {0}", assembunny2.Registers['a']));
+    }
+
+    public static string Day13()
+    {
+      int mazeSize = 10;
+
+      var maze = new int[mazeSize][];
+
+      var currentPosition = new Tuple<int, int>(1, 1);
+
+      var testInput = 10;
+
+      for(var y = 0; y < maze.Length; y++)
+      {
+        maze[y] = new int[mazeSize];
+
+        for(var x = 0; x < maze[y].Length; x++)
+        {
+          int amountOf1s = 0;
+          
+          var bitArray = new BitArray(
+            new int[]{
+              testInput + (x * x + 3 * x + 2 * x * y + y + y * y)
+            }
+          );
+          
+          foreach(bool bit in bitArray)
+          {
+            if(bit)
+            {
+              amountOf1s++;
+            }
+          }
+
+          maze[y][x] = amountOf1s;
+        }
+      }
+
+      // foreach(var mazeRow in maze)
+      // {
+      //   foreach(var room in mazeRow)
+      //   {
+      //     System.Console.Write(room % 2 == 0 ? "." : "#");
+      //   }
+
+      //   Console.CursorTop += 1;
+      //   Console.CursorLeft = 0;
+      // }
+
+      var coordinatesVisited = new List<Tuple<int, int>>();
+      int steps = 0;
+
+      while(currentPosition.Item1 != 4 && currentPosition.Item2 != 7)
+      {
+        coordinatesVisited.Add(currentPosition);
+
+        if(maze[currentPosition.Item1 + 1][currentPosition.Item2] % 2 == 0)
+        {
+          currentPosition = new Tuple<int, int>(currentPosition.Item1 + 1, currentPosition.Item2);
+        }
+        else if(maze[currentPosition.Item1][currentPosition.Item2 + 1] % 2 == 0)
+        {
+          currentPosition = new Tuple<int, int>(currentPosition.Item1, currentPosition.Item2 + 1);
+        }
+        
+        steps++;
+      }
+
+      System.Console.WriteLine("{0} steps taken!", steps);
+
+      return string.Empty;
     }
   }
 }
