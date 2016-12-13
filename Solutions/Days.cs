@@ -688,15 +688,44 @@ enarar";
 
         coordinatesVisited.Add(currentPosition);
 
-        if(maze[currentPosition.Item1 + Math.Sign(currentPosition.Item1 + targetCoordinate.Item1)][currentPosition.Item2] % 2 == 0)
-        {
-          currentPosition = new Tuple<int, int>(currentPosition.Item1 + Math.Sign(currentPosition.Item1 + targetCoordinate.Item1), currentPosition.Item2);
-        }
-        else if(maze[currentPosition.Item1][currentPosition.Item2 + Math.Sign(currentPosition.Item2 + targetCoordinate.Item2)] % 2 == 0)
-        {
-          currentPosition = new Tuple<int, int>(currentPosition.Item1, currentPosition.Item2 + 1);
-        }
+        bool toTheRight = false;
+        int xOffSet = 0;
+        int yOffSet = 0;
         
+        while(currentPosition == coordinatesVisited.Last())
+        {
+          var yMove = Math.Sign(targetCoordinate.Item1 - currentPosition.Item1) + yOffSet;
+
+          if(maze[currentPosition.Item1 + yMove][currentPosition.Item2] % 2 == 0 
+          && coordinatesVisited.Last() != new Tuple<int, int>(currentPosition.Item1 + yMove, currentPosition.Item2)
+          && yMove != 0)
+          {
+            currentPosition = new Tuple<int, int>(currentPosition.Item1 + yMove, currentPosition.Item2);
+            continue;
+          }
+
+          var xMove = Math.Sign(targetCoordinate.Item2 - currentPosition.Item2) + xOffSet;
+
+          if(maze[currentPosition.Item1][currentPosition.Item2 + xMove] % 2 == 0 
+          && coordinatesVisited.Last() != new Tuple<int, int>(currentPosition.Item1, currentPosition.Item2 + xMove)
+          && xMove != 0)
+          {
+            currentPosition = new Tuple<int, int>(currentPosition.Item1, currentPosition.Item2 + xMove);
+            continue;
+          }
+
+          if(toTheRight)
+          {
+            xOffSet++;
+          }
+          else
+          {
+            yOffSet++;
+          }
+
+          toTheRight = !toTheRight;
+        }
+
         steps++;
       }
 
