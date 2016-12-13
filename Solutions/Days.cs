@@ -627,68 +627,45 @@ enarar";
 
     public static string Day13()
     {
-      var seed = 10;
-      var mazeSizeY = 7;
-      var mazeSizeX = 10;
+      var seed = 1358;
+      var mazeSizeY = 60;
+      var mazeSizeX = 60;
 
       var maze = new Maze(seed, mazeSizeY, mazeSizeX);
 
+      var coordinatesVisitingFrequency = new Dictionary<Tuple<int, int>, int>();
       var coordinatesVisited = new List<Tuple<int, int>>();
-      int steps = 0;
-
+      
       var currentPosition = new Tuple<int, int>(1, 1);
-      var targetCoordinate = new Tuple<int, int>(4, 7);
-
+      var targetCoordinate = new Tuple<int, int>(39, 31);
+      
+      var moves = 0;
+      
       while((currentPosition.Item1 != targetCoordinate.Item1 || currentPosition.Item2 != targetCoordinate.Item2))
       {
-        System.Console.WriteLine("Current position y: {0} x: {1}", currentPosition.Item1, currentPosition.Item2);
-
-        coordinatesVisited.Add(currentPosition);
-
-        bool toTheRight = false;
-        int xOffSet = 0;
-        int yOffSet = 0;
-        
-        while(currentPosition == coordinatesVisited.Last())
+        if(!coordinatesVisitingFrequency.Keys.Contains(currentPosition))
         {
-          var yMove = Math.Sign(targetCoordinate.Item1 - currentPosition.Item1) + yOffSet;
-
-          if(maze.Grid[currentPosition.Item1 + yMove][currentPosition.Item2] % 2 == 0 
-          && (!coordinatesVisited.Select(x => string.Format("{0}{1}", x.Item1, x.Item2)).Contains(string.Format("{0}{1}", currentPosition.Item1 + yMove, currentPosition.Item2))) 
-          && yMove != 0)
-          {
-            currentPosition = new Tuple<int, int>(currentPosition.Item1 + yMove, currentPosition.Item2);
-            continue;
-          }
-
-          var xMove = Math.Sign(targetCoordinate.Item2 - currentPosition.Item2) + xOffSet;
-
-          if(maze.Grid[currentPosition.Item1][currentPosition.Item2 + xMove] % 2 == 0 
-          && (!coordinatesVisited.Select(x => string.Format("{0}{1}", x.Item1, x.Item2)).Contains(string.Format("{0}", currentPosition.Item1, currentPosition.Item2 + xMove)))
-          && xMove != 0)
-          {
-            currentPosition = new Tuple<int, int>(currentPosition.Item1, currentPosition.Item2 + xMove);
-            continue;
-          }
-
-          if(toTheRight)
-          {
-            xOffSet += currentPosition.Item2 + 1 == mazeSizeX ? -1 : 1;
-          }
-          else
-          {
-            yOffSet += currentPosition.Item1 + 1 == mazeSizeY ? -1 : 1;
-          }
-
-          toTheRight = !toTheRight;
+          coordinatesVisitingFrequency.Add(currentPosition, 1);
+        }
+        else
+        {
+          coordinatesVisitingFrequency[currentPosition]++;
         }
 
-        steps++;
+        coordinatesVisited.Add(currentPosition);
+        
+        moves += maze.Move(
+          ref currentPosition, 
+          coordinatesVisitingFrequency.Keys.ToList(), 
+          coordinatesVisited,
+          Math.Sign(targetCoordinate.Item2 - currentPosition.Item2), 
+          Math.Sign(targetCoordinate.Item1 - currentPosition.Item1)
+        );
       }
 
-      System.Console.WriteLine("{0} steps taken!", steps);
+      maze.PrintMaze(currentPosition, targetCoordinate, coordinatesVisitingFrequency.Keys.ToList());
 
-      return string.Empty;
+      return string.Format("Day13 p1 {0}", moves);
     }
   }
 }

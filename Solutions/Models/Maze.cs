@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -39,24 +40,79 @@ namespace Solutions.Models.Day13
       }
     }
 
-    public void PrintMaze(Tuple<int, int> currentPosition, List<Tuple<int, int>> coordinatesVisited)
+    public int Move(ref Tuple<int, int> currentPosition, List<Tuple<int, int>> uniqueCoordinates, List<Tuple<int, int>> visitedCoordinates,int xMove, int yMove)
+    {
+      var xy = false;
+      var moves = 0;
+
+      while(moves < 4)
+      {
+        if(!xy) //Move along the X axis
+        {
+          if(Grid[currentPosition.Item1][currentPosition.Item2 + xMove] % 2 == 0 
+          && !uniqueCoordinates.Select(x => $"{x.Item1}{x.Item2}").Contains($"{currentPosition.Item1}{currentPosition.Item2 + xMove}")
+          && xMove != 0)
+          {
+            currentPosition = new Tuple<int, int>(currentPosition.Item1, currentPosition.Item2 + xMove);
+            return 1;
+          }
+          else //If you can't move on the X axis, try the Y axis.
+          {
+            xMove = xMove == 1 ? -1 : 1;
+            xy = !xy;
+          }
+        }
+        else //Move along the Y axis
+        {
+          if(Grid[currentPosition.Item1+ yMove][currentPosition.Item2] % 2 == 0 
+          && !uniqueCoordinates.Select(x => $"{x.Item1}{x.Item2}").Contains($"{currentPosition.Item1 + yMove}{currentPosition.Item2}")
+          && yMove != 0)
+          {
+            currentPosition = new Tuple<int, int>(currentPosition.Item1 + yMove, currentPosition.Item2);
+            return 1;
+          }
+          else //If you can't move on the Y axis, try the X axis again.
+          {
+            yMove = yMove == 1 ? -1 : 1;
+            xy = !xy;
+          }
+        }
+        
+        moves++;
+      }
+
+      //We've gotten stuck. Ruh roh.
+      //We need to calculate how much moves we need to go back to become un-stuck. How can we know that?
+      currentPosition = visitedCoordinates[visitedCoordinates.IndexOf(currentPosition) - 1];
+      return -1;
+    }
+
+    public void PrintMaze(Tuple<int, int> currentPosition, Tuple<int, int> targetCoordinate, List<Tuple<int, int>> coordinatesVisited)
     {
       for(var y = 0; y < Grid.Length; y++)
+      {
+        for(var x = 0; x < Grid[y].Length; x++)
         {
-          for(var x = 0; x < Grid[y].Length; x++)
+          if(y == currentPosition.Item1 && x == currentPosition.Item2)
           {
-            if(y == currentPosition.Item1 && x == currentPosition.Item2 || coordinatesVisited.Contains(new Tuple<int, int>(y, x)))
-            {
-              System.Console.Write("O");
-            }
-            else
-            {
-              System.Console.Write(Grid[y][x] % 2 == 0 ? "." : "#");
-            }          
+            System.Console.Write("O");
           }
-
-          System.Console.WriteLine();
+          else if(y == targetCoordinate.Item1 && x == targetCoordinate.Item2)
+          {
+            System.Console.Write("!");
+          }
+          else if(coordinatesVisited.Contains(new Tuple<int, int>(y, x)))
+          {
+            System.Console.Write("X");
+          }
+          else
+          {
+            System.Console.Write(Grid[y][x] % 2 == 0 ? "." : "#");
+          }          
         }
+
+        System.Console.WriteLine();
+      }
     }
   }
 }
