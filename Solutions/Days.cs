@@ -674,7 +674,12 @@ enarar";
     {
       var input = "jlmsuwbz";
       var otp = new OneTimePad();
-      return string.Concat(string.Format("Day 14 p1: {0}", otp.Process(input, false)), Environment.NewLine, string.Format("Day 14 p2: {0}", otp.Process(input, true)));
+      
+      return string.Concat(
+        string.Format("Day 14 p1: {0}", otp.Process(input, false)), 
+        Environment.NewLine, 
+        string.Format("Day 14 p2: {0}", otp.Process(input, true))
+      );
     }
   }
 }
