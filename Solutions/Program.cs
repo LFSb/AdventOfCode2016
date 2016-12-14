@@ -18,7 +18,8 @@ namespace Solutions
       // Console.WriteLine(Days.Day10());
       // Console.WriteLine(Days.Day11());
       // Console.WriteLine(Days.Day12());
-      System.Console.WriteLine(Days.Day13()); 
+      // System.Console.WriteLine(Days.Day13());
+       System.Console.WriteLine(Days.Day14()); 
     }
   }
 }

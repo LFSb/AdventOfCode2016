@@ -40,7 +40,7 @@ namespace Solutions.Models.Day13
       }
     }
 
-    public int Move(ref Tuple<int, int> currentPosition, List<Tuple<int, int>> uniqueCoordinates, List<Tuple<int, int>> visitedCoordinates,int xMove, int yMove)
+    public int Move(ref Tuple<int, int> currentPosition, ref List<Tuple<int, int>> visitedCoordinates, List<Tuple<int, int>> uniqueCoordinates, int xMove, int yMove)
     {
       var xy = false;
       var moves = 0;
@@ -54,6 +54,7 @@ namespace Solutions.Models.Day13
           && xMove != 0)
           {
             currentPosition = new Tuple<int, int>(currentPosition.Item1, currentPosition.Item2 + xMove);
+            visitedCoordinates.Add(currentPosition);
             return 1;
           }
           else //If you can't move on the X axis, try the Y axis.
@@ -69,6 +70,7 @@ namespace Solutions.Models.Day13
           && yMove != 0)
           {
             currentPosition = new Tuple<int, int>(currentPosition.Item1 + yMove, currentPosition.Item2);
+            visitedCoordinates.Add(currentPosition);
             return 1;
           }
           else //If you can't move on the Y axis, try the X axis again.
@@ -84,6 +86,7 @@ namespace Solutions.Models.Day13
       //We've gotten stuck. Ruh roh.
       //We need to calculate how much moves we need to go back to become un-stuck. How can we know that?
       currentPosition = visitedCoordinates[visitedCoordinates.IndexOf(currentPosition) - 1];
+      visitedCoordinates.RemoveAt(visitedCoordinates.Count() - 1);
       return -1;
     }
 
