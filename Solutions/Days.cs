@@ -16,6 +16,7 @@ using Solutions.Models.Day10;
 using Solutions.Models.Day11;
 using Solutions.Models.Day12;
 using Solutions.Models.Day13;
+using Solutions.Models.Day14;
 
 namespace Solutions
 {
@@ -627,9 +628,9 @@ enarar";
 
     public static string Day13()
     {
-      var seed = 1358;
-      var mazeSizeY = 60;
-      var mazeSizeX = 60;
+      var seed = 1350;
+      var mazeSizeY = 50;
+      var mazeSizeX = 50;
 
       var maze = new Maze(seed, mazeSizeY, mazeSizeX);
 
@@ -639,6 +640,8 @@ enarar";
       var currentPosition = new Tuple<int, int>(1, 1);
       var targetCoordinate = new Tuple<int, int>(39, 31);
       
+      var moves = 0;
+
       while((currentPosition.Item1 != targetCoordinate.Item1 || currentPosition.Item2 != targetCoordinate.Item2))
       {
         if(!coordinatesVisitingFrequency.Keys.Contains(currentPosition))
@@ -649,78 +652,29 @@ enarar";
         {
           coordinatesVisitingFrequency[currentPosition]++;
         }
-        
-        maze.PrintMaze(currentPosition, targetCoordinate, coordinatesVisitingFrequency.Keys.ToList());
 
-        maze.Move(
+        moves += maze.Move(
           ref currentPosition, 
           ref coordinatesVisited,
           coordinatesVisitingFrequency.Keys.ToList(), 
           Math.Sign(targetCoordinate.Item2 - currentPosition.Item2), 
           Math.Sign(targetCoordinate.Item1 - currentPosition.Item1)
         );
+        
+        maze.PrintMaze(currentPosition, targetCoordinate, coordinatesVisited);
       }     
+
+      
+      System.Console.WriteLine(moves);
 
       return string.Format("Day13 p1 {0}", coordinatesVisited.Count());
     }
 
     public static string Day14()
     {
-      var input = "abc";
-      var idx = 0;
-      var keys = new List<string>();
-      
-      while(keys.Count() < 8)
-      {
-        using(var md5 = System.Security.Cryptography.MD5.Create())
-        {
-          var hash = md5.ComputeHash(Encoding.ASCII.GetBytes(input + idx));
-
-          var isKey = false;
-
-          var hex = BitConverter.ToString(hash).Replace("-","").ToLower();
-
-          var triples = string.Empty;
-
-          for(var idx2 = 0; idx2 < hex.Length; idx2++)
-          {
-            var character = hex[idx2];
-
-            if(idx2 + 1 >= hex.Length)
-            {
-              continue;
-            }
-            else
-            {
-              if(hex[idx2 + 1 ] == character)
-              {
-                if(idx2 + 2 >= hex.Length)
-                {
-                  continue;
-                }
-                else
-                {
-                  if(hex[idx2 + 2] == character)
-                  {
-                    triples += character;
-                  }
-                }
-              }
-            }
-          }
-
-          if(!string.IsNullOrEmpty(triples))
-          {
-            System.Console.WriteLine(triples);
-          }
-        }
-
-        idx++;
-      }
-
-
-      
-      return string.Empty;
+      var input = "jlmsuwbz";
+      var otp = new OneTimePad();
+      return string.Concat(string.Format("Day 14 p1: {0}", otp.Process(input, false)), Environment.NewLine, string.Format("Day 14 p2: {0}", otp.Process(input, true)));
     }
   }
 }

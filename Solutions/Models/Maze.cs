@@ -113,7 +113,7 @@ namespace Solutions.Models.Day13
             System.Console.Write(Grid[y][x] % 2 == 0 ? "." : "#");
           }          
         }
-
+        
         System.Console.WriteLine();
       }
     }
