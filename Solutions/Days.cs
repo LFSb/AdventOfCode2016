@@ -17,6 +17,7 @@ using Solutions.Models.Day11;
 using Solutions.Models.Day12;
 using Solutions.Models.Day13;
 using Solutions.Models.Day14;
+using Solutions.Models.Day15;
 
 namespace Solutions
 {
@@ -680,6 +681,37 @@ enarar";
         Environment.NewLine, 
         string.Format("Day 14 p2: {0}", otp.Process(input, true))
       );
+    }
+
+    public static string Day15()
+    {
+      var discs = new List<Disc>();
+      var testInput = new []{"Disc #1 has 5 positions; at time=0, it is at position 4.", "Disc #2 has 2 positions; at time=0, it is at position 1."};
+      
+      foreach(var input in testInput)
+      {
+        discs.Add(new Disc(input));
+      }
+
+      var time = 0; var smoothSailing = false;
+      
+      while(!smoothSailing)
+      {
+        var first = discs.First();
+
+        if(first.CurrentPosition == first.Positions) //On the next tick, it will be at position 0. We should start looking here.
+        {
+          foreach(var disc in discs)
+          {
+            disc.Tick();
+          }
+        }
+
+        System.Console.WriteLine("time = {0}",time++);
+        Console.ReadLine();
+      }     
+
+      return string.Empty;
     }
   }
 }
