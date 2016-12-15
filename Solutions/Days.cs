@@ -152,6 +152,8 @@ enarar";
 
     private const string ActualInput12 = "./Input/Input12.txt";  
 
+    private const string ActualInput15 = "./Input/Input15.txt";  
+
     public static string Day1()
     {
       var input1Array = Input1.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -686,32 +688,42 @@ enarar";
     public static string Day15()
     {
       var discs = new List<Disc>();
-      var testInput = new []{"Disc #1 has 5 positions; at time=0, it is at position 4.", "Disc #2 has 2 positions; at time=0, it is at position 1."};
+
+      var input = File.ReadAllLines(ActualInput15);
       
-      foreach(var input in testInput)
+      foreach(var line in input)
       {
-        discs.Add(new Disc(input));
+        discs.Add(new Disc(line));
       }
 
-      var time = 0; var smoothSailing = false;
+      var time1 = 0; var smoothSailing = false;
       
       while(!smoothSailing)
       {
-        var first = discs.First();
+        var discNumber = 1;
+        var tempTime = time1;
 
-        if(first.CurrentPosition == first.Positions) //On the next tick, it will be at position 0. We should start looking here.
+        foreach(var disk in discs)
         {
-          foreach(var disc in discs)
+          if(disk.CanMoveThrough(tempTime, discNumber))
           {
-            disc.Tick();
+            if(discNumber == discs.Count())
+            {
+              smoothSailing = true;
+            }
           }
+          else
+          {
+            break;
+          }
+
+          discNumber++;
         }
 
-        System.Console.WriteLine("time = {0}",time++);
-        Console.ReadLine();
-      }     
+        time1++;
+      }
 
-      return string.Empty;
+      return string.Concat(string.Format("Day 15 p1: {0}", time1 - 1));
     }
   }
 }
