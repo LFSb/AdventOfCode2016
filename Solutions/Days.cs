@@ -725,5 +725,70 @@ enarar";
 
       return string.Concat(string.Format("Day 15 p1: {0}", time1 - 1));
     }
+
+    public static string Day16()
+    {
+      var input = "11101000110010100".Select(x => x == '1').ToList();
+      
+      var requiredLength = 35651584;
+
+      while(input.Count() < requiredLength)
+      {
+        var a = input;
+
+        var bBuilder = new List<bool>();
+
+        foreach(var character in a)
+        {
+          switch(character)
+          {
+            case true:
+            {
+              bBuilder.Add(false);
+            } break;
+            case false:
+            {
+              bBuilder.Add(true);
+            } break;
+          }
+        }
+
+        input = new List<bool>(a);
+        input.Add(false);
+        bBuilder.Reverse();
+        input.AddRange(bBuilder);
+      }
+
+      input = input.Take(requiredLength).ToList();
+
+      var checkSum = new List<bool>();
+
+      while(checkSum.Count() % 2 == 0)
+      {
+        var tempCheckSum = new List<bool>();
+
+        for(var i = 0; i < input.Count(); i += 2)
+        {
+          if(i + 1 >= input.Count())
+          {
+            break;
+          }
+
+          if((input[i] && input[i + 1]) || (!input[i] && !input[i + 1]))
+          {
+            tempCheckSum.Add(true);
+          }
+          else if((input[i] && !input[i + 1]) || (!input[i] && input[i + 1]))
+          {
+            tempCheckSum.Add(false);
+          }
+        }
+
+        input = tempCheckSum;
+        checkSum = tempCheckSum;
+      }
+
+      return string.Format("Day 16 p1: {0}", string.Join("", checkSum.Select(x => x ? '1' : '0')));
+    }
   }
 }
