@@ -736,26 +736,10 @@ enarar";
       {
         var a = input;
 
-        var bBuilder = new List<bool>();
-
-        foreach(var character in a)
-        {
-          switch(character)
-          {
-            case true:
-            {
-              bBuilder.Add(false);
-            } break;
-            case false:
-            {
-              bBuilder.Add(true);
-            } break;
-          }
-        }
-
+        var bBuilder = a.Select(x => !x).Reverse();
+        
         input = new List<bool>(a);
         input.Add(false);
-        bBuilder.Reverse();
         input.AddRange(bBuilder);
       }
 
