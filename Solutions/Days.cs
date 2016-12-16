@@ -773,15 +773,8 @@ enarar";
           {
             break;
           }
-
-          if((input[i] && input[i + 1]) || (!input[i] && !input[i + 1]))
-          {
-            tempCheckSum.Add(true);
-          }
-          else if((input[i] && !input[i + 1]) || (!input[i] && input[i + 1]))
-          {
-            tempCheckSum.Add(false);
-          }
+          
+          tempCheckSum.Add((input[i] == input[i + 1]));
         }
 
         input = tempCheckSum;
