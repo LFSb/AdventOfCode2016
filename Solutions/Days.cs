@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,6 +17,7 @@ using Solutions.Models.Day12;
 using Solutions.Models.Day13;
 using Solutions.Models.Day14;
 using Solutions.Models.Day15;
+using Solutions.Models.Day17;
 
 namespace Solutions
 {
@@ -766,6 +766,24 @@ enarar";
       }
 
       return string.Format("Day 16 p1: {0}", string.Join("", checkSum.Select(x => x ? '1' : '0')));
+    }
+
+    public static string Day17()
+    {
+      var input = "awrkjxxr";
+
+      var grid = new bool[4][];
+      var md5 = System.Security.Cryptography.MD5.Create();
+
+      var room1 = new Rooms(new Tuple<int, int>(3, 3));
+
+      var answer1 = room1.Process(md5, input, false);
+
+      var room2 = new Rooms(new Tuple<int, int>(3, 3));
+
+      var answer2 = room2.Process(md5, input, true);
+
+      return string.Concat(string.Format("Day 17 p1: {0}", answer1), Environment.NewLine, string.Format("Day 27 p2: {0}", answer2));
     }
   }
 }
