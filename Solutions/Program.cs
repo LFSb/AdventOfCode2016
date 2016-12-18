@@ -1,4 +1,6 @@
-﻿namespace Solutions
+﻿using System;
+
+namespace Solutions
 {
   public class Program
   {
@@ -14,14 +16,14 @@
       // Console.WriteLine(Days.Day8());
       // Console.WriteLine(Days.Day9());
       // Console.WriteLine(Days.Day10());
-      // Console.WriteLine(Days.Day11());
+      Console.WriteLine(Days.Day11());
       // Console.WriteLine(Days.Day12());
       // System.Console.WriteLine(Days.Day13());
       // System.Console.WriteLine(Days.Day14()); 
       // System.Console.WriteLine(Days.Day15()); 
       // System.Console.WriteLine(Days.Day16());
       // System.Console.WriteLine(Days.Day17());
-      System.Console.WriteLine(Days.Day18());
+      // System.Console.WriteLine(Days.Day18());
     }
   }
 }

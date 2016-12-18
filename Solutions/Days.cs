@@ -592,7 +592,42 @@ enarar";
       //First, construct the floors according to the layout. Create pairs of the same type.
       var pairs = ParseLayout.Go(TestInput11);
 
-      return string.Empty;
+      var initialState = new State
+      {
+        Floor = 0,
+        Distance = 0,
+        Distributions = pairs
+      };
+
+      var queue = new Queue<State>();
+
+      queue.Enqueue(initialState);
+
+      var answer = string.Empty;
+
+      do
+      {
+        var currentState = queue.Dequeue();
+
+        if(currentState.Distributions.All(x => x.Item1 == 3 && x.Item2 == 3)) //All the pairs are on the top floor.
+        {
+          answer = currentState.Distance.ToString();
+        }
+        else
+        {
+          var possibleMoves = currentState.DeterminePossibleMoves();
+
+          foreach(var possibleMove in possibleMoves)
+          {
+            queue.Enqueue(possibleMove);
+          }
+
+          //Determine possible states from current state.
+        }
+      }
+      while(queue.Count() > 0);
+
+      return answer;
     }
 
     public static string Day12()
@@ -803,6 +838,7 @@ enarar";
           var left = tile == 0 ? false : grid[row - 1][tile - 1];
           var center = grid[row - 1][tile];
           var right = tile == input.Length - 1 ? false : grid[row - 1][tile + 1];
+          
           grid[row][tile] = ((left && center && !right) || 
                               (!left && center && right) || 
                               (left && !center && !right) || 
