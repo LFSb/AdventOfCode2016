@@ -785,5 +785,37 @@ enarar";
 
       return string.Concat(string.Format("Day 17 p1: {0}", answer1), Environment.NewLine, string.Format("Day 27 p2: {0}", answer2));
     }
+
+    public static string Day18()
+    {
+      var input = ".^.^..^......^^^^^...^^^...^...^....^^.^...^.^^^^....^...^^.^^^...^^^^.^^.^.^^..^.^^^..^^^^^^.^^^..^".Select(x => x == '^').ToArray();
+      var gridRows = 400000; //p2
+      // var gridRows = 40; //p1
+      var grid = new bool[gridRows][];
+      grid[0] = input;
+
+      for(var row = 1; row < gridRows; row++)
+      {
+        grid[row] = new bool[input.Length];
+
+        for(var tile = 0; tile < input.Length; tile++)
+        {
+          var left = tile == 0 ? false : grid[row - 1][tile - 1];
+          var center = grid[row - 1][tile];
+          var right = tile == input.Length - 1 ? false : grid[row - 1][tile + 1];
+          grid[row][tile] = ((left && center && !right) || 
+                              (!left && center && right) || 
+                              (left && !center && !right) || 
+                              (!left && !center && right)
+                            );
+        }
+      }
+
+      var safeTiles = grid.SelectMany(x => x.Select(y => y)).Count(x =>!x);
+
+      System.Console.WriteLine(safeTiles);
+
+      return string.Format("Day 18: {0}", gridRows);
+    }
   }
 }

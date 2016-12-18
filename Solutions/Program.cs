@@ -20,7 +20,8 @@
       // System.Console.WriteLine(Days.Day14()); 
       // System.Console.WriteLine(Days.Day15()); 
       // System.Console.WriteLine(Days.Day16());
-      System.Console.WriteLine(Days.Day17());
+      // System.Console.WriteLine(Days.Day17());
+      System.Console.WriteLine(Days.Day18());
     }
   }
 }
