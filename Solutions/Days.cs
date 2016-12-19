@@ -865,40 +865,44 @@ enarar";
 
     public static string Day19()
     {
-      var elves = Enumerable.Repeat(true, 3004953).ToArray();
+      var input = 3004953;
 
-      var iterator = 0;
+      var tempInput = input;
+      var remainder = 0;
 
-      while(elves.Count(x => x) > 1)
+      var power = 0d; var idx = 1;
+      var powers = new List<double>();
+
+      while(power < input)
       {
-        if(elves[iterator])
-        {
-          var elf = iterator;
-          if(iterator == elves.Length - 1)
-          {
-            iterator = iterator - elves.Length;
-          }
-
-          var tempIndex = 1;
-
-          while(!elves[iterator +  tempIndex]) //If the next elf does not have any presents, skip that bastard.
-          {
-            tempIndex++;
-          }
-
-          System.Console.WriteLine("Elf {0} has been robbed by elf {1}!", iterator + tempIndex, elf);
-
-          elves[iterator + tempIndex] = false;  
-          iterator = iterator + tempIndex;
-        }
-
-        iterator++;
+        power = Math.Pow(2, idx++);
+        powers.Add(power);
       }
 
+      while(!powers.Contains(tempInput))
+      {
+        tempInput -= 1;
+        remainder++;
+      }
 
-      var answer = Array.IndexOf(elves, elves.First(x => x)) + 1;
+      //This does the same as the above, but it's more fun.
 
-      return string.Format("{0}", answer);
+      var inputForFun = Convert.ToString(3004953, 2);
+      
+      var answer = inputForFun.Substring(1) + inputForFun[0]; //lel
+
+      int winner = 1;
+      
+      for (var iterator = 1; iterator < input; iterator++) 
+      {
+        winner = winner % iterator + 1;
+        if (winner > (iterator + 1) / 2) 
+        {
+            winner++;
+        }
+      }
+
+      return string.Concat(string.Format("Day 19 p1:{0}", (remainder * 2) + 1), Environment.NewLine, string.Format("Day 19 p2: {0}", winner));
     }
   }
 }
