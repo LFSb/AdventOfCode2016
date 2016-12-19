@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Solutions.Models.Day1;
 using Solutions.Models.Day2;
@@ -713,6 +714,14 @@ enarar";
       var input = "jlmsuwbz";
       var otp = new OneTimePad();
       
+      var sw = new Stopwatch();
+      sw.Start();
+      var output = otp.Process(input, false);
+      sw.Stop();
+
+      System.Console.WriteLine(sw.ElapsedMilliseconds);
+
+
       return string.Concat(
         string.Format("Day 14 p1: {0}", otp.Process(input, false)), 
         Environment.NewLine, 
@@ -852,6 +861,44 @@ enarar";
       System.Console.WriteLine(safeTiles);
 
       return string.Format("Day 18: {0}", gridRows);
+    }
+
+    public static string Day19()
+    {
+      var elves = Enumerable.Repeat(true, 3004953).ToArray();
+
+      var iterator = 0;
+
+      while(elves.Count(x => x) > 1)
+      {
+        if(elves[iterator])
+        {
+          var elf = iterator;
+          if(iterator == elves.Length - 1)
+          {
+            iterator = iterator - elves.Length;
+          }
+
+          var tempIndex = 1;
+
+          while(!elves[iterator +  tempIndex]) //If the next elf does not have any presents, skip that bastard.
+          {
+            tempIndex++;
+          }
+
+          System.Console.WriteLine("Elf {0} has been robbed by elf {1}!", iterator + tempIndex, elf);
+
+          elves[iterator + tempIndex] = false;  
+          iterator = iterator + tempIndex;
+        }
+
+        iterator++;
+      }
+
+
+      var answer = Array.IndexOf(elves, elves.First(x => x)) + 1;
+
+      return string.Format("{0}", answer);
     }
   }
 }

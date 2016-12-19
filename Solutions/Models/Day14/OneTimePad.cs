@@ -33,7 +33,7 @@ namespace Solutions.Models.Day14
         {
           for(var year = 0; part2 ? year < 2017 : year < 1; year++)
           {
-            hex = BitConverter.ToString(MD5.ComputeHash(Encoding.ASCII.GetBytes(hashInput))).Replace("-","").ToLower();
+            hex = BitConverter.ToString(MD5.ComputeHash(Encoding.ASCII.GetBytes(hashInput))).Replace("-",string.Empty).ToLower();
 
             if(part2)
             {
