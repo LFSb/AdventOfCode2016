@@ -593,14 +593,14 @@ enarar";
       //First, construct the floors according to the layout. Create pairs of the same type.
       var pairs = ParseLayout.Go(TestInput11);
 
-      var initialState = new State
+      var initialState = new Solutions.Models.Day11.State
       {
         Floor = 0,
         Distance = 0,
         Distributions = pairs
       };
 
-      var queue = new Queue<State>();
+      var queue = new Queue<Solutions.Models.Day11.State>();
 
       queue.Enqueue(initialState);
 
@@ -667,46 +667,56 @@ enarar";
 
     public static string Day13()
     {
-      var seed = 1350;
+      var seed = 1358;
       var mazeSizeY = 50;
       var mazeSizeX = 50;
-
+      var answer = string.Empty;
+      
       var maze = new Maze(seed, mazeSizeY, mazeSizeX);
-
-      var coordinatesVisitingFrequency = new Dictionary<Tuple<int, int>, int>();
-      var coordinatesVisited = new List<Tuple<int, int>>();
       
-      var currentPosition = new Tuple<int, int>(1, 1);
-      var targetCoordinate = new Tuple<int, int>(39, 31);
+      var target = new Tuple<int, int>(39, 31);
       
-      var moves = 0;
-
-      while((currentPosition.Item1 != targetCoordinate.Item1 || currentPosition.Item2 != targetCoordinate.Item2))
+      var queue = new Queue<Solutions.Models.Day13.State>();
+      var previousStates = new List<Tuple<int, int>>();
+      var uniqueCoordinates = 0;
+      queue.Enqueue(new Solutions.Models.Day13.State
       {
-        if(!coordinatesVisitingFrequency.Keys.Contains(currentPosition))
+        Steps = 0,
+        CurrentPosition = new Tuple<int, int>(1, 1)
+      });
+
+      do
+      {
+        var currentState = queue.Dequeue();
+
+        if(currentState.Steps < 51 && !previousStates.Contains(currentState.CurrentPosition))
         {
-          coordinatesVisitingFrequency.Add(currentPosition, 1);
+          uniqueCoordinates++;
         }
-        else
+
+        //maze.PrintMaze(currentState.CurrentPosition, target, previousStates);
+  
+        previousStates.Add(currentState.CurrentPosition);
+
+        if(currentState.CurrentPosition.Item1 == target.Item1 && currentState.CurrentPosition.Item2 == target.Item2)
         {
-          coordinatesVisitingFrequency[currentPosition]++;
+          answer = currentState.Steps.ToString();
         }
 
-        moves += maze.Move(
-          ref currentPosition, 
-          ref coordinatesVisited,
-          coordinatesVisitingFrequency.Keys.ToList(), 
-          Math.Sign(targetCoordinate.Item2 - currentPosition.Item2), 
-          Math.Sign(targetCoordinate.Item1 - currentPosition.Item1)
-        );
-        
-        maze.PrintMaze(currentPosition, targetCoordinate, coordinatesVisited);
-      }     
+        var possibleMoves = maze.ReturnPossibleMoves(currentState.CurrentPosition, previousStates);
 
-      
-      System.Console.WriteLine(moves);
+        foreach(var possibleMove in possibleMoves)
+        {
+          queue.Enqueue(new Solutions.Models.Day13.State
+          {
+            Steps = currentState.Steps + 1,
+            CurrentPosition = possibleMove
+          });
+        }
+      }
+      while(queue.Any());
 
-      return string.Format("Day13 p1 {0}", coordinatesVisited.Count());
+      return string.Concat(string.Format("Day 13 p1: {0}", answer), Environment.NewLine, string.Format("Day 13 p2: {0}", uniqueCoordinates));
     }
 
     public static string Day14()
@@ -720,7 +730,6 @@ enarar";
       sw.Stop();
 
       System.Console.WriteLine(sw.ElapsedMilliseconds);
-
 
       return string.Concat(
         string.Format("Day 14 p1: {0}", otp.Process(input, false)), 
@@ -887,9 +896,9 @@ enarar";
 
       //This does the same as the above, but it's more fun.
 
-      var inputForFun = Convert.ToString(3004953, 2);
+      var inputForFun = Convert.ToString(input, 2);
       
-      var answer = inputForFun.Substring(1) + inputForFun[0]; //lel
+      var answer = Convert.ToInt32(inputForFun.Substring(1) + inputForFun[0], 2); //lel
 
       int winner = 1;
       
@@ -902,7 +911,7 @@ enarar";
         }
       }
 
-      return string.Concat(string.Format("Day 19 p1:{0}", (remainder * 2) + 1), Environment.NewLine, string.Format("Day 19 p2: {0}", winner));
+      return string.Concat(string.Format("Day 19 p1: {0} {1}", (remainder * 2) + 1), answer, Environment.NewLine, string.Format("Day 19 p2: {0}", winner));
     }
   }
 }
