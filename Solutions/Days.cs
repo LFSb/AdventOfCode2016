@@ -19,6 +19,7 @@ using Solutions.Models.Day13;
 using Solutions.Models.Day14;
 using Solutions.Models.Day15;
 using Solutions.Models.Day17;
+using Solutions.Models.Day20;
 
 namespace Solutions
 {
@@ -899,6 +900,41 @@ enarar";
       var answer = Array.IndexOf(elves, elves.First(x => x)) + 1;
 
       return string.Format("{0}", answer);
+    }
+
+    public static string Day20()
+    {
+      var lines = File.ReadAllLines(@"./Input/Input20.txt");
+
+      var pairs = new List<Pair>();
+
+      foreach(var line in lines)
+      {
+        pairs.Add(new Pair(line));
+      }
+
+      var orderedPairs = pairs.OrderBy(x => x.LowerBound).ThenBy(x => x.UpperBound);
+      uint answer = 0;
+
+      var iterations = 0;
+
+      while(answer == 0)
+      {
+        var startPoint = orderedPairs.Skip(iterations).First();
+
+        var endPoint = orderedPairs.Skip(iterations + 1).First();
+
+        if(startPoint.UpperBound < endPoint.LowerBound && startPoint.UpperBound + 1 != endPoint.LowerBound)
+        {
+          answer = startPoint.UpperBound + 1;
+        }
+
+        //Between the startPoint and the endpoint we need to check for the first number that doesn't fall inside one of the ranges. If there's no number, we need to move on to the next pair.
+
+        iterations++;
+      }
+
+      return answer.ToString();
     }
   }
 }
