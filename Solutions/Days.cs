@@ -926,7 +926,7 @@ enarar";
         pairs.Add(new Pair(line));
       }
 
-      var orderedPairs = pairs.OrderBy(x => x.LowerBound).ThenBy(x => x.UpperBound);
+      var orderedPairs = pairs.OrderBy(x => x.LowerBound).ThenBy(x => x.UpperBound).ToArray();
       uint answer = 0;
 
       var iterations = 0;
@@ -947,7 +947,27 @@ enarar";
         iterations++;
       }
 
-      return answer.ToString();
+      uint ip = 0;
+      uint answer2 = 0;
+      var pair = pairs.FirstOrDefault(x => x.LowerBound <= ip && x.UpperBound >= ip);
+      //p2
+      while(ip < uint.MaxValue)
+      {
+        while(pair != null)
+        {
+          ip = pair.UpperBound + 1;
+          pair = pairs.FirstOrDefault(x => x.LowerBound <= ip && x.UpperBound >= ip);
+        }
+
+        if(ip < uint.MaxValue)
+        {
+          answer2++;
+          ip++;
+          pair = pairs.FirstOrDefault(x => x.LowerBound <= ip && x.UpperBound >= ip);
+        }
+      }
+
+      return string.Format("Day 20 P1: {0} Day 20 P2: {1}", answer, answer2);
     }
   }
 }
