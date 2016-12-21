@@ -156,6 +156,9 @@ enarar";
 
     private const string ActualInput15 = "./Input/Input15.txt";  
 
+    private const string ActualInput21 = "./Input/Input21.txt";  
+
+
     public static string Day1()
     {
       var input1Array = Input1.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -917,7 +920,8 @@ enarar";
         pairs.Add(new Pair(line));
       }
 
-      var orderedPairs = pairs.OrderBy(x => x.LowerBound).ThenBy(x => x.UpperBound);
+      var orderedPairs = pairs.OrderBy(x => x.LowerBound).ThenBy(x => x.UpperBound).ToArray();
+
       uint answer = 0;
 
       var iterations = 0;
@@ -938,7 +942,94 @@ enarar";
         iterations++;
       }
 
+      foreach(var orderedPair in orderedPairs)
+      {
+        var startPoint = orderedPair;
+
+        var endPoint = orderedPairs[Array.IndexOf(orderedPairs, orderedPair) + 1];
+      }
+
       return answer.ToString();
+    }
+
+    public static string Day21()
+    {
+      var input = "abcde".ToCharArray();
+
+      foreach(var line in File.ReadAllLines(ActualInput21))
+      {
+        var split = line.Split(' ');
+
+        switch(split[0])
+        {
+          case "swap":
+          {
+            var indexA = 0;
+            var indexB = 0;
+
+            if(char.IsLetter(split[3][0]))
+            {
+              indexA = Array.IndexOf(input, split[3][0]);
+              indexB = Array.IndexOf(input, split[6][0]);
+            }
+            else
+            {
+              indexA = int.Parse(split[3]);
+              indexB = int.Parse(split[6]);
+            }
+          } break;
+          case "rotate":
+          {
+            var shift = 0;
+
+            switch(split[1])
+            {
+              case "left":
+              {
+                
+              } break;
+              case "right":
+              {
+                
+              } break;
+              case "based":
+              {
+                
+              } break;
+            }
+
+            //TODO: Build a smart for loop to loop all through this shit right here.
+
+          } break;
+          case "reverse":
+          {
+            var start = int.Parse(split[2]);
+            var end = int.Parse(split[4]);
+
+            var subset = input.Skip(start).Take(input.Length - end).Reverse().ToArray();
+
+            for(var idx = start; idx < end; idx++)
+            {
+              input[idx] = subset[idx - subset.Length];
+            }
+          } break;
+          case "move":
+          {
+
+          } break;
+        }
+
+      }
+
+      var tmp = input[0];
+
+      input[0] = input[4];
+      input[4] = tmp;
+
+
+
+
+      return string.Empty;
     }
   }
 }
