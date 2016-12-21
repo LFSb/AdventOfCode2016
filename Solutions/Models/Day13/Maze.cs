@@ -40,6 +40,41 @@ namespace Solutions.Models.Day13
       }
     }
 
+    public List<Tuple<int, int>> ReturnPossibleMoves(Tuple<int, int> currentPosition, List<Tuple<int, int>> previousPositions)
+    {
+      var returnList = new List<Tuple<int, int>>();
+
+      for(var direction = 0; direction < 4; direction++)
+      {
+        var newPosition = default(Tuple<int, int>);
+
+        if(direction % 2 == 0) //Move on Y axis
+        {
+          var yShift = direction - 1;
+          if(currentPosition.Item1 + yShift >= 0 && currentPosition.Item1 + yShift < Grid.Length && Grid[currentPosition.Item1 + yShift][currentPosition.Item2] % 2 == 0)
+          {
+            newPosition = new Tuple<int, int>(currentPosition.Item1 + yShift, currentPosition.Item2);
+          }          
+        }
+        else
+        {
+          var xShift = direction - 2;
+          if(currentPosition.Item2 + xShift >= 0 && currentPosition.Item2 + xShift < Grid.First().Length && Grid[currentPosition.Item1][currentPosition.Item2 + xShift] % 2 == 0)
+          {
+            newPosition = new Tuple<int, int>(currentPosition.Item1, currentPosition.Item2 + xShift);
+          }
+        }
+
+        if(newPosition != null && !previousPositions.Contains(newPosition))
+        {
+          returnList.Add(newPosition);
+        }       
+      }
+
+      return returnList;
+    }
+
+    //This was the old implementation. New one will(should) be much better.
     public int Move(ref Tuple<int, int> currentPosition, ref List<Tuple<int, int>> visitedCoordinates, List<Tuple<int, int>> uniqueCoordinates, int xMove, int yMove)
     {
       var xy = false;
