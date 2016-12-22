@@ -160,6 +160,19 @@ enarar";
 
     private const string ActualInput21 = "./Input/Input21.txt";
 
+    private static string[] TestInput22 = new []{
+      "Filesystem            Size  Used  Avail  Use%",
+"/dev/grid/node-x0-y0   10T    8T     2T   80%",
+"/dev/grid/node-x0-y1   11T    6T     5T   54%",
+"/dev/grid/node-x0-y2   32T   28T     4T   87%",
+"/dev/grid/node-x1-y0    9T    7T     2T   77%",
+"/dev/grid/node-x1-y1    8T    0T     8T    0%",
+"/dev/grid/node-x1-y2   11T    7T     4T   63%",
+"/dev/grid/node-x2-y0   10T    6T     4T   60%",
+"/dev/grid/node-x2-y1    9T    8T     1T   88%",
+"/dev/grid/node-x2-y2    9T    6T     3T   66%"
+    };
+
     private const string ActualInput22 = "./Input/Input22.txt";
 
     public static string Day1()
@@ -1013,23 +1026,7 @@ enarar";
         }
       }
 
-      var dfGrid = new DfResult[dfResults.Max(df => df.Y)][];
-      var maxX = dfResults.Max(df => df.X);
-
-      for(var y = 0; y < dfGrid.Length; y++)
-      {
-        dfGrid[y] = new DfResult[maxX];
-
-        for(var x = 0; x < dfResults.Max(df => df.X); x++)
-        {
-          var xCoord = dfResults.FirstOrDefault(df => df.ID == string.Format("{0}{1}", y, x));
-
-          if(xCoord != null)
-          {
-            dfGrid[y][x] = xCoord;
-          }
-        }
-      }
+      //P1
 
       var viablePairs = 0;
 
@@ -1038,7 +1035,61 @@ enarar";
         viablePairs += dfResult.CalculateNumberOfViableNodes(dfResults);
       }
 
-      return viablePairs.ToString();
+      //P2
+
+      //First, create the grid. For visualisation.
+
+      var dfGrid = new DfResult[dfResults.Max(df => df.Y) + 1][];
+      var maxX = dfResults.Max(df => df.X + 1);
+      var largeNodes = dfResults.Where(x => x.Used > dfResults.Max(y => y.Avail));
+
+      var printGrid = true;
+
+      var queue = new Queue<GridState>();
+
+      for(var y = 0; y < dfGrid.Length; y++)
+      {
+        dfGrid[y] = new DfResult[maxX];
+
+        for(var x = 0; x < maxX; x++)
+        {
+          var node = dfResults.First(df => df.ID == string.Format("{0}{1}", y, x));
+          dfGrid[y][x] = node;
+
+          if(printGrid)
+          {
+            if(y == 0 && x == 0)
+            {
+              Console.Write("(.)");
+            }
+            else if(node.UsePercentage == 0)
+            {
+              Console.Write(" _ ");
+            }
+            else if(y == 0 && x == dfResults.Max(df => df.X))
+            {
+              Console.Write(" G ");
+            }
+            else if(largeNodes.Select(n => n.ID).Contains(string.Format("{0}{1}", y, x)))
+            {
+              Console.Write(" # ");
+            }
+            else
+            {
+              Console.Write(" . ");
+            }
+          }
+        }
+
+        if(printGrid)
+        {
+          Console.WriteLine();
+        }        
+      }
+
+      //Really, visualisation is all you need. Fuck the police.
+
+      return string.Format("Day 22 p1: {0}", viablePairs);
     }
   }
 }
