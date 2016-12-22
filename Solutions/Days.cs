@@ -1001,7 +1001,7 @@ enarar";
     {
       //p1
 
-      var input = "abcdefgh".ToCharArray();
+      var input = "fbgdceah".ToCharArray();
 
       var scrambler = new Scrambler();
 
@@ -1089,7 +1089,7 @@ enarar";
 
       //Really, visualisation is all you need. Fuck the police.
 
-      return string.Format("Day 22 p1: {0}", viablePairs);
+      return string.Concat(string.Format("Day 22 p1: {0}", viablePairs), Environment.NewLine, string.Format("Day 22 p2: {0}", @"¯\_(ツ)_/¯"));
     }
   }
 }

@@ -64,14 +64,48 @@ namespace Solutions.Models.Day21
               {
                 var amountOfShifts = Array.IndexOf(input, split[6][0]);
 
-                amountOfShifts = amountOfShifts >= 4 ? amountOfShifts + 2 : amountOfShifts + 1;
-
                 if(reverse)
                 {
-                  Shift(ref input, amountOfShifts, false);
+                  switch(amountOfShifts)
+                  {
+                    case 0:
+                    {
+                      Shift(ref input, 1, false);
+                    }break;
+                    case 1:
+                    {
+                      Shift(ref input, 1, false);
+                    }break;
+                    case 2:
+                    {
+                      Shift(ref input, 2, true);
+                    }break;
+                    case 3:
+                    {
+                      Shift(ref input, 2, false);
+                    }break;
+                    case 4:
+                    {
+                      Shift(ref input, 1, true);
+                    }break;
+                    case 5:
+                    {
+                      Shift(ref input, 3, false);
+                    }break;
+                    case 6:
+                    {
+                      //Don't shift a damn thing.
+                    }break;
+                    case 7:
+                    {
+                      Shift(ref input, 4, true);
+                    }break;
+                  }
                 }
                 else
                 {
+                  amountOfShifts = amountOfShifts >= 4 ? amountOfShifts + 2 : amountOfShifts + 1;
+
                   Shift(ref input, amountOfShifts, true);
                 }
               } break;
