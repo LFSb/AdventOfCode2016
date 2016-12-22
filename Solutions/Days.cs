@@ -990,11 +990,13 @@ enarar";
 
       var scrambler = new Scrambler();
 
-      var output = scrambler.Scramble(input, File.ReadAllLines(ActualInput21));
-
+      //var output = scrambler.Scramble(input.ToArray(), File.ReadAllLines(ActualInput21), false);
+      var output = string.Empty;
       //p2
+
+      var output2 = scrambler.Scramble(input.ToArray(), File.ReadAllLines(ActualInput21).Reverse().ToArray(), true);
       
-      return string.Concat(string.Format("Day 21 P1: {0}", string.Join("", input)), Environment.NewLine, string.Format("Day 21 P2: {0}","fuck if i know"));
+      return string.Concat(string.Format("Day 21 P1: {0}", string.Join("", output)), Environment.NewLine, string.Format("Day 21 P2: {0}", output2));
     }
   }
 }

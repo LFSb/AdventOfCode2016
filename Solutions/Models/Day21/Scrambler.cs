@@ -40,26 +40,39 @@ namespace Solutions.Models.Day21
             {
               case "left":
               {
-                Shift(ref input, int.Parse(split[2]), false);
+                if(reverse)
+                {
+                  Shift(ref input, int.Parse(split[2]), true);
+                }
+                else
+                {
+                  Shift(ref input, int.Parse(split[2]), false);
+                }                
               } break;
               case "right":
               {
-                Shift(ref input, int.Parse(split[2]), true);
+                if(reverse)
+                {
+                  Shift(ref input, int.Parse(split[2]), false);
+                }
+                else
+                {
+                  Shift(ref input, int.Parse(split[2]), true);
+                }                
               } break;
               case "based":
               {
                 var amountOfShifts = Array.IndexOf(input, split[6][0]);
 
-                for(var shiftNumber = 0; shiftNumber < (amountOfShifts >= 4 ? amountOfShifts + 2 : amountOfShifts + 1); shiftNumber++)
-                {
-                  var temp = input[input.Length - 1];
+                amountOfShifts = amountOfShifts >= 4 ? amountOfShifts + 2 : amountOfShifts + 1;
 
-                  for(var character = input.Length - 1; character > 0 ; character--)
-                  {
-                    input[character] = input[character - 1];
-                  }
-                  
-                  input[0] = temp;
+                if(reverse)
+                {
+                  Shift(ref input, amountOfShifts, false);
+                }
+                else
+                {
+                  Shift(ref input, amountOfShifts, true);
                 }
               } break;
             }
@@ -68,7 +81,7 @@ namespace Solutions.Models.Day21
           case "reverse":
           {
             var start = int.Parse(split[2]);
-            var end = int.Parse(split[4]);
+            var end = int.Parse(split[4]);      
 
             var subset = input.Skip(start).Take(end - start + 1).Reverse().ToArray();
 
@@ -82,8 +95,19 @@ namespace Solutions.Models.Day21
           } break;
           case "move":
           {
-            var startPosition = int.Parse(split[2]);
-            var inputPosition = int.Parse(split[5]);
+            int startPosition = 0;
+            int inputPosition = 0;
+
+            if(reverse)
+            {
+              startPosition = int.Parse(split[5]);
+              inputPosition = int.Parse(split[2]);
+            }
+            else
+            {
+              startPosition = int.Parse(split[2]);
+              inputPosition = int.Parse(split[5]);
+            }           
 
             var fromChar = input[startPosition];
 
