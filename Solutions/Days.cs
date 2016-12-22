@@ -21,6 +21,7 @@ using Solutions.Models.Day15;
 using Solutions.Models.Day17;
 using Solutions.Models.Day20;
 using Solutions.Models.Day21;
+using Solutions.Models.Day22;
 
 namespace Solutions
 {
@@ -157,8 +158,9 @@ enarar";
 
     private const string ActualInput15 = "./Input/Input15.txt";  
 
-    private const string ActualInput21 = "./Input/Input21.txt";  
+    private const string ActualInput21 = "./Input/Input21.txt";
 
+    private const string ActualInput22 = "./Input/Input22.txt";
 
     public static string Day1()
     {
@@ -997,6 +999,46 @@ enarar";
       var output2 = scrambler.Scramble(input.ToArray(), File.ReadAllLines(ActualInput21).Reverse().ToArray(), true);
       
       return string.Concat(string.Format("Day 21 P1: {0}", string.Join("", output)), Environment.NewLine, string.Format("Day 21 P2: {0}", output2));
+    }
+
+    public static string Day22()
+    {
+      var dfResults = new List<DfResult>();
+
+      foreach(var line in File.ReadAllLines(ActualInput22))
+      {
+        if(line.StartsWith("/"))
+        {
+          dfResults.Add(new DfResult(line));
+        }
+      }
+
+      var dfGrid = new DfResult[dfResults.Max(df => df.Y)][];
+      var maxX = dfResults.Max(df => df.X);
+
+      for(var y = 0; y < dfGrid.Length; y++)
+      {
+        dfGrid[y] = new DfResult[maxX];
+
+        for(var x = 0; x < dfResults.Max(df => df.X); x++)
+        {
+          var xCoord = dfResults.FirstOrDefault(df => df.ID == string.Format("{0}{1}", y, x));
+
+          if(xCoord != null)
+          {
+            dfGrid[y][x] = xCoord;
+          }
+        }
+      }
+
+      var viablePairs = 0;
+
+      foreach(var dfResult in dfResults)
+      {
+        viablePairs += dfResult.CalculateNumberOfViableNodes(dfResults);
+      }
+
+      return viablePairs.ToString();
     }
   }
 }
