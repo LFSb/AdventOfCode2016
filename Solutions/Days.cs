@@ -175,6 +175,8 @@ enarar";
 
     private const string ActualInput22 = "./Input/Input22.txt";
 
+    private const string ActualInput23 = "./Input/Input23.txt";
+
     public static string Day1()
     {
       var input1Array = Input1.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -667,7 +669,7 @@ enarar";
         else
         {
           instruction = lines.Length - 1;
-        }        
+        }
       }
 
       for(var instruction = 0; instruction < lines.Length;)
@@ -1090,6 +1092,36 @@ enarar";
       //Really, visualisation is all you need. Fuck the police.
 
       return string.Concat(string.Format("Day 22 p1: {0}", viablePairs), Environment.NewLine, string.Format("Day 22 p2: {0}", @"¯\_(ツ)_/¯"));
+    }
+
+    public static string Day23()
+    {
+      var assembunny = new Assembunny(false);
+      
+      var lines = File.ReadLines(ActualInput23).ToArray();
+
+      for(var instruction = 0; instruction < lines.Length;)
+      {
+        assembunny.PrintRegisters();
+
+        if(instruction < lines.Length)
+        {
+          var jump = assembunny.ParseInput(lines[instruction]);
+          
+          for(var t = 0; t < assembunny.Toggles.Count(); t++)
+          {
+            assembunny.Toggles[t] -= jump;
+          }
+          
+          instruction += jump;
+        }
+        else
+        {
+          instruction = lines.Length - 1;
+        }
+      }
+
+      return assembunny.Registers['a'].ToString();
     }
   }
 }
