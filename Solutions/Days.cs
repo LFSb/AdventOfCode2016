@@ -664,7 +664,7 @@ enarar";
       {
         if(instruction < lines.Length)
         {
-          instruction += assembunny.ParseInput(lines[instruction]);
+          instruction += assembunny.ParseInput(lines[instruction], instruction, lines);
         }
         else
         {
@@ -676,7 +676,7 @@ enarar";
       {
         if(instruction < lines.Length)
         {
-          instruction += assembunny2.ParseInput(lines[instruction]);
+          instruction += assembunny2.ParseInput(lines[instruction], instruction, lines);
         }
         else
         {
@@ -1102,18 +1102,12 @@ enarar";
 
       for(var instruction = 0; instruction < lines.Length;)
       {
-        assembunny.PrintRegisters();
+        // System.Console.WriteLine(instruction);
+        // assembunny.PrintRegisters();
 
         if(instruction < lines.Length)
         {
-          var jump = assembunny.ParseInput(lines[instruction]);
-          
-          for(var t = 0; t < assembunny.Toggles.Count(); t++)
-          {
-            assembunny.Toggles[t] -= jump;
-          }
-          
-          instruction += jump;
+          instruction += assembunny.ParseInput(lines[instruction], instruction, lines);
         }
         else
         {

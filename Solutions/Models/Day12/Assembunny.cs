@@ -7,8 +7,6 @@ namespace Solutions.Models.Day12
   {
     public Dictionary<char, int> Registers { get; set; } = new Dictionary<char, int>();
 
-    public List<int?> Toggles = new List<int?>();
-
     public Assembunny(bool part2)
     {
       if(part2)
@@ -28,28 +26,9 @@ namespace Solutions.Models.Day12
     }
 
     //This method will return its offset.
-    public int ParseInput(string input)
+    public int ParseInput(string input, int currentPosition, string[] lines)
     {
       var split = input.Split(' ');
-
-      var engagedToggle = Toggles.FirstOrDefault(x => x == 0);
-
-      if(engagedToggle != null)
-      {
-        if(split[0] != "tgl")
-        {
-          if(split.Length == 2) //One argument Instruction
-          {
-            split[0] = split[0] == "inc" ? "dec" : "inc";
-          }
-          else if(split.Length == 3) //Two argument Instruction
-          {
-            split[0] = split[0] == "jnz" ? "cpy" : "jnz";
-          }
-        }       
-
-        Toggles.Remove(engagedToggle);
-      }
 
       switch(split[0]) //Instruction
       {
@@ -100,15 +79,33 @@ namespace Solutions.Models.Day12
         }
         case "tgl":
         {
+          int offset = 0;
+
           if(char.IsLetter(split[1][0]))
           {
-            Toggles.Add(Registers[split[1][0]] + 1);
+            offset = Registers[split[1][0]]; 
           }
           else
           {
-            Toggles.Add(int.Parse(split[1]) + 1);
+            offset = int.Parse(split[1]); 
           }
 
+          if(offset != 0)
+          {
+            var lineToChange = lines[currentPosition + offset].Split(' ');
+
+            if(lineToChange.Length == 2) //One argument Instruction
+            {
+              lineToChange[0] = lineToChange[0] == "inc" ? "dec" : "inc";
+            }
+            else if(lineToChange.Length == 3) //Two argument Instruction
+            {
+              lineToChange[0] = lineToChange[0] == "jnz" ? "cpy" : "jnz";
+            }
+
+            lines[currentPosition + offset] = string.Join(" ", lineToChange);
+          }         
+          
           return 1;
         }
         default:
