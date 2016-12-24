@@ -22,6 +22,7 @@ using Solutions.Models.Day17;
 using Solutions.Models.Day20;
 using Solutions.Models.Day21;
 using Solutions.Models.Day22;
+using Solutions.Models.Day24;
 
 namespace Solutions
 {
@@ -176,6 +177,15 @@ enarar";
     private const string ActualInput22 = "./Input/Input22.txt";
 
     private const string ActualInput23 = "./Input/Input23.txt";
+
+    private static List<string> TestInput24 = new List<string>{
+      "###########",
+      "#0.1.....2#",
+      "#.#######.#",
+      "#4.......3#",
+      "###########"};
+
+    private static string ActualInput24 = "./Input/Input24.txt";
 
     public static string Day1()
     {
@@ -1102,10 +1112,9 @@ enarar";
 
       for(var instruction = 0; instruction < lines.Length;)
       {
-        //System.Console.WriteLine(instruction);
         
         assembunny.PrintRegisters();
-        
+
         if(instruction < lines.Length)
         {
           instruction += assembunny.ParseInput(lines[instruction], instruction, lines);
@@ -1117,6 +1126,138 @@ enarar";
       }
 
       return assembunny.Registers['a'].ToString();
+    }
+
+    public static string Day24()
+    {
+      var lines = TestInput24;//File.ReadAllLines(ActualInput24);
+
+      var grid = new int?[lines.Count()][];
+
+      var positions = new Dictionary<int, Tuple<int, int>>();
+
+      for(var lineNr = 0; lineNr < lines.Count(); lineNr++)
+      {
+        var line = lines[lineNr];
+        
+        grid[lineNr] = new int?[line.Length];
+
+        for(var charNr = 0; charNr < line.Length; charNr++)
+        {
+          switch(line[charNr])
+          {
+            case '#':
+            {
+              grid[lineNr][charNr] = -1;
+            } break;
+            case '.':
+            {
+              grid[lineNr][charNr] = null;
+            } break;
+            default:
+            {
+              positions.Add(int.Parse(new string(line[charNr], 1)), new Tuple<int, int>(lineNr, charNr));
+              grid[lineNr][charNr] = int.Parse(new string(line[charNr], 1));
+            } break;
+          }
+        }
+      }
+
+      var totalSteps = 0;
+
+      //We need a good way to order the positions. How?
+
+      var nodes = new List<Node>();
+
+      nodes.Add(new Node
+      {
+        Name = "0",
+        Distance = 0,
+        Position = positions[0]
+      });
+
+      foreach(var position in positions.Skip(1))
+      {
+        nodes.Add(new Node
+        {
+          Name = position.Key.ToString(),
+          Distance = int.MaxValue,
+          Position = position.Value
+        });
+      }
+
+      foreach(var node in nodes)
+      {
+        node.Neighbors = nodes.Except(new []{ node }).ToList();
+
+        //.Select(x => new Node
+        // {
+        //   Name = x.Name,
+        //   Distance = x.Distance,
+        //   Position = x.Position  
+        // })
+      }
+
+      while(nodes.Any(x => !x.Visited))
+      {
+        var current = nodes.First(x => !x.Visited);
+
+        foreach(var neighbor in current.Neighbors)
+        {
+          var distance = current.CalculateDistance(neighbor);
+
+          if(distance + current.Distance < neighbor.Distance)
+          {
+            neighbor.Distance = distance + current.Distance;
+          }
+        }
+
+        current.Visited = true;
+      }
+
+      var orderedPositions = positions.OrderBy(x => x.Value.Item1 + x.Value.Item2).ThenBy(x => x.Value.Item2).ToArray();
+
+      //Do a BFS on the ordered positions.
+      
+      for(var t = 0; t < orderedPositions.Count() - 1; t++)
+      {
+        var steps = 0;
+        var queue = new Queue<BotState>();
+
+        while(steps == 0)
+        {
+          queue.Enqueue(new BotState
+          {
+            Steps = 0,
+            Position = orderedPositions[t].Value
+          });
+
+          var currentState = queue.Dequeue();
+          
+          if(currentState.Position.Item1 == orderedPositions[t + 1].Value.Item1 && currentState.Position.Item2 == orderedPositions[t + 1].Value.Item2)
+          {
+            System.Console.WriteLine("Found {0}!", t);
+            steps = currentState.Steps;
+          }
+          else
+          {
+            var nextSteps = currentState.ReturnPossibleStates(grid);
+
+            foreach(var step in nextSteps)
+            {
+              queue.Enqueue(new BotState
+              {
+                Steps = currentState.Steps + 1,
+                Position = step
+              });
+            }
+          }
+        }
+
+        totalSteps += steps;
+      }
+
+      return totalSteps.ToString();
     }
   }
 }
