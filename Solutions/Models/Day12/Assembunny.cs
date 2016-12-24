@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections.Generic;
 
 namespace Solutions.Models.Day12
@@ -18,13 +17,13 @@ namespace Solutions.Models.Day12
       }
       else
       {
-        Registers.Add('a', 0);
+        Registers.Add('a', 12);
         Registers.Add('b', 0);
         Registers.Add('c', 0);
         Registers.Add('d', 0);
       }
     }
-
+    
     //This method will return its offset.
     public int ParseInput(string input, int currentPosition, string[] lines)
     {
@@ -42,6 +41,13 @@ namespace Solutions.Models.Day12
           {
             Registers[split[2][0]] = int.Parse(split[1]);
           }          
+          return 1;
+        }
+        case "mlt":
+        {
+          var val1 = Registers[split[1][0]];
+          var val2 = Registers[split[2][0]];
+          Registers[split[3][0]] = val1 * val2;
           return 1;
         } 
         case "inc":
@@ -90,7 +96,7 @@ namespace Solutions.Models.Day12
             offset = int.Parse(split[1]); 
           }
 
-          if(offset != 0)
+          if(offset != 0 && (currentPosition + offset) < lines.Length)
           {
             var lineToChange = lines[currentPosition + offset].Split(' ');
 

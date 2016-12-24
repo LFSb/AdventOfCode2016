@@ -1102,9 +1102,10 @@ enarar";
 
       for(var instruction = 0; instruction < lines.Length;)
       {
-        // System.Console.WriteLine(instruction);
-        // assembunny.PrintRegisters();
-
+        //System.Console.WriteLine(instruction);
+        
+        assembunny.PrintRegisters();
+        
         if(instruction < lines.Length)
         {
           instruction += assembunny.ParseInput(lines[instruction], instruction, lines);
