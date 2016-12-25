@@ -185,7 +185,9 @@ enarar";
       "#4.......3#",
       "###########"};
 
-    private static string ActualInput24 = "./Input/Input24.txt";
+    private const string ActualInput24 = "./Input/Input24.txt";
+
+    private const string ActualInput25 = "./Input/Input25.txt";
 
     public static string Day1()
     {
@@ -674,7 +676,7 @@ enarar";
       {
         if(instruction < lines.Length)
         {
-          instruction += assembunny.ParseInput(lines[instruction], instruction, lines);
+          // instruction += assembunny.ParseInput(lines[instruction], instruction, lines);
         }
         else
         {
@@ -686,7 +688,7 @@ enarar";
       {
         if(instruction < lines.Length)
         {
-          instruction += assembunny2.ParseInput(lines[instruction], instruction, lines);
+          // instruction += assembunny2.ParseInput(lines[instruction], instruction, lines);
         }
         else
         {
@@ -1112,12 +1114,11 @@ enarar";
 
       for(var instruction = 0; instruction < lines.Length;)
       {
-        
         assembunny.PrintRegisters();
 
         if(instruction < lines.Length)
         {
-          instruction += assembunny.ParseInput(lines[instruction], instruction, lines);
+          // instruction += assembunny.ParseInput(lines[instruction], instruction, lines);
         }
         else
         {
@@ -1258,6 +1259,68 @@ enarar";
       }
 
       return totalSteps.ToString();
+    }
+
+    public static string Day25()
+    {
+      var bunny = new Assembunny(false);
+
+      var lines = File.ReadAllLines(ActualInput25);
+
+      for(var i = 0; i < int.MaxValue; i++)
+      {
+        bunny = new Assembunny(false);
+        bunny.Registers['a'] = i;
+
+        System.Console.WriteLine();
+        System.Console.WriteLine("starting for {0}", bunny.Registers['a']);
+        System.Console.WriteLine();
+        bool? clock = null;
+        var sb = new StringBuilder();
+
+        for(var instruction = 0; instruction < lines.Length;)
+        {
+          if(sb.Length > 100)
+          {
+            System.Console.WriteLine($"The answer is {i}!");
+            return i.ToString();
+          }
+
+          if(instruction < lines.Length)
+          {
+            int? outClock;
+
+            instruction += bunny.ParseInput(lines[instruction], instruction, lines, out outClock);
+            
+            if(outClock != null)
+            {
+              if(clock == null)
+              {
+                if(outClock != 0)
+                {
+                  break;
+                }
+              }
+              else
+              {
+                if(outClock == 1 == clock)
+                {
+                  break; //the sequence is broken.
+                }
+              }
+
+              clock = outClock == 1;
+              sb.Append(outClock);
+            }
+          }
+          else
+          {
+            instruction = lines.Length - 1;
+          }
+        }
+      }
+
+      return string.Empty;
     }
   }
 }

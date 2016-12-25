@@ -25,12 +25,29 @@ namespace Solutions.Models.Day12
     }
     
     //This method will return its offset.
-    public int ParseInput(string input, int currentPosition, string[] lines)
+    public int ParseInput(string input, int currentPosition, string[] lines, out int? clock)
     {
+      clock = null;
+
       var split = input.Split(' ');
 
       switch(split[0]) //Instruction
       {
+        case "out":
+        {
+          if(char.IsLetter(split[1][0]))
+          {
+            clock = Registers[split[1][0]];
+            System.Console.Write(Registers[split[1][0]]);
+          }
+          else
+          {
+            clock = int.Parse(split[1]);
+            System.Console.Write(split[1]);
+          }
+          
+          return 1;
+        }
         case "cpy":
         {
           if(char.IsLetter(split[1][0]))
