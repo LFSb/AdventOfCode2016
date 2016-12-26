@@ -1191,9 +1191,6 @@ enarar";
       }
 
       var initial = nodes.First(x => x.Name == 0);
-      var sw = new Stopwatch();
-      
-      sw.Start();
 
       foreach(var current in initial.Neighbors.OrderBy(x => x.Distance))
       {
@@ -1221,9 +1218,6 @@ enarar";
       }
 
       var quickestPath = nodes.Where(x => x.TotalDistance != 0).OrderBy(x => x.TotalDistance).First().TotalDistance;
-      
-      sw.Stop();
-      System.Console.WriteLine(sw.ElapsedMilliseconds);
 
       return quickestPath.ToString();
     }
