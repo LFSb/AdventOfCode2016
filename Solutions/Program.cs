@@ -29,8 +29,8 @@ namespace Solutions
       // System.Console.WriteLine(Days.Day21());
       // System.Console.WriteLine(Days.Day22());
       // System.Console.WriteLine(Days.Day23());
-      // System.Console.WriteLine(Days.Day24());
-      System.Console.WriteLine(Days.Day25());
+      System.Console.WriteLine(Days.Day24());
+      // System.Console.WriteLine(Days.Day25());
     }
   }
 }

@@ -1170,12 +1170,14 @@ enarar";
 
       var nodes = new List<Node>();
 
-      nodes.Add(new Node
+      var start = new Node
       {
         Name = "0",
         Distance = 0,
         Position = positions[0]
-      });
+      };
+
+      nodes.Add(start);
 
       foreach(var position in positions.Skip(1))
       {
@@ -1187,78 +1189,41 @@ enarar";
         });
       }
 
-      foreach(var node in nodes)
+      foreach(var node in nodes) //At first, set the distance of all the nodes according to the distance from the beginning.
       {
-        node.Neighbors = nodes.Except(new []{ node }).ToList();
-
-        //.Select(x => new Node
-        // {
-        //   Name = x.Name,
-        //   Distance = x.Distance,
-        //   Position = x.Position  
-        // })
+        node.Neighbors = nodes.Except(new []{ node, nodes.First(x => x.Distance == 0) }).ToList();
       }
 
-      while(nodes.Any(x => !x.Visited))
+      var initial = nodes.OrderBy(x => x.Distance).First(x => !x.Visited);
+
+      foreach(var current in initial.Neighbors.OrderBy(x => x.Distance))
       {
-        var current = nodes.First(x => !x.Visited);
+        current.Distance = current.CalculateDistance(initial, grid);
+        
+        var prev = current;
+        current.Path.AddRange(new []{ initial, current });
 
-        foreach(var neighbor in current.Neighbors)
+        var currentNeighbors = current.Neighbors.Select(x => x).ToList();
+
+        for(var i = 0; i < prev.Neighbors.Count(); i++)
         {
-          var distance = current.CalculateDistance(neighbor);
+          var neighbor = currentNeighbors.OrderBy(x => prev.CalculateDistance(x, grid)).First();
+          
+          currentNeighbors.Remove(neighbor);
 
-          if(distance + current.Distance < neighbor.Distance)
-          {
-            neighbor.Distance = distance + current.Distance;
-          }
+          current.Path.Add(neighbor);
+
+          current.TotalDistance += neighbor.CalculateDistance(prev, grid);
+          prev = neighbor;
         }
 
         current.Visited = true;
+        current.TotalDistance += current.Distance;
       }
 
-      var orderedPositions = positions.OrderBy(x => x.Value.Item1 + x.Value.Item2).ThenBy(x => x.Value.Item2).ToArray();
+      var quickestPath = nodes.Where(x => x.TotalDistance != 0).OrderBy(x => x.TotalDistance).First().TotalDistance;
 
-      //Do a BFS on the ordered positions.
-      
-      for(var t = 0; t < orderedPositions.Count() - 1; t++)
-      {
-        var steps = 0;
-        var queue = new Queue<BotState>();
-
-        while(steps == 0)
-        {
-          queue.Enqueue(new BotState
-          {
-            Steps = 0,
-            Position = orderedPositions[t].Value
-          });
-
-          var currentState = queue.Dequeue();
-          
-          if(currentState.Position.Item1 == orderedPositions[t + 1].Value.Item1 && currentState.Position.Item2 == orderedPositions[t + 1].Value.Item2)
-          {
-            System.Console.WriteLine("Found {0}!", t);
-            steps = currentState.Steps;
-          }
-          else
-          {
-            var nextSteps = currentState.ReturnPossibleStates(grid);
-
-            foreach(var step in nextSteps)
-            {
-              queue.Enqueue(new BotState
-              {
-                Steps = currentState.Steps + 1,
-                Position = step
-              });
-            }
-          }
-        }
-
-        totalSteps += steps;
-      }
-
-      return totalSteps.ToString();
+      return quickestPath.ToString();
     }
 
     public static string Day25()
