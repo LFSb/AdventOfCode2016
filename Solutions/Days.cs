@@ -1131,7 +1131,7 @@ enarar";
 
     public static string Day24()
     {
-      var lines = TestInput24;//File.ReadAllLines(ActualInput24);
+      var lines = File.ReadAllLines(ActualInput24);
 
       var grid = new int?[lines.Count()][];
 
@@ -1164,26 +1164,22 @@ enarar";
         }
       }
 
-      var totalSteps = 0;
-
-      //We need a good way to order the positions. How?
-
       var nodes = new List<Node>();
 
       var start = new Node
       {
-        Name = "0",
+        Name = 0,
         Distance = 0,
         Position = positions[0]
       };
 
       nodes.Add(start);
 
-      foreach(var position in positions.Skip(1))
+      foreach(var position in positions.Where(x => x.Key > 0))
       {
         nodes.Add(new Node
         {
-          Name = position.Key.ToString(),
+          Name = position.Key,
           Distance = int.MaxValue,
           Position = position.Value
         });
@@ -1191,10 +1187,13 @@ enarar";
 
       foreach(var node in nodes) //At first, set the distance of all the nodes according to the distance from the beginning.
       {
-        node.Neighbors = nodes.Except(new []{ node, nodes.First(x => x.Distance == 0) }).ToList();
+        node.Neighbors = nodes.Except(new []{ node, nodes.First(x => x.Name == 0)}).ToList();
       }
 
-      var initial = nodes.OrderBy(x => x.Distance).First(x => !x.Visited);
+      var initial = nodes.First(x => x.Name == 0);
+      var sw = new Stopwatch();
+      
+      sw.Start();
 
       foreach(var current in initial.Neighbors.OrderBy(x => x.Distance))
       {
@@ -1222,6 +1221,9 @@ enarar";
       }
 
       var quickestPath = nodes.Where(x => x.TotalDistance != 0).OrderBy(x => x.TotalDistance).First().TotalDistance;
+      
+      sw.Stop();
+      System.Console.WriteLine(sw.ElapsedMilliseconds);
 
       return quickestPath.ToString();
     }
